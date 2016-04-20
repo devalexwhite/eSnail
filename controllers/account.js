@@ -15,6 +15,7 @@ module.exports = function(app,express,db)
 	    }
 	});
 
+	//Post route for
 	app.post('/accounts/createAccount', function (req, res, next) {
 		console.log("HERE");
 		console.log(req.body.username);

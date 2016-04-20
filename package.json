@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/toaster99/eSnail/issues"
   },
-  "homepage": "https://github.com/toaster99/eSnail#readme"
+  "homepage": "https://github.com/toaster99/eSnail#readme",
+  "dependencies": {
+    "password-hash-and-salt": "^0.1.3"
+  }
 }
