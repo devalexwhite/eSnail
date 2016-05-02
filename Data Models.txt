@@ -1,0 +1,21 @@
+-- Data Models --
+
++ PO Box:
+first_name:				First name of the user
+email:					User's email address
+zipcode:				User's zipcode
+password:				Hashed user password
+box_number:				Generated PO Box number
+messages[]:				Array of message objects
+
++ Message:
+title:					Title of the message
+content:				Message body
+sender_box_number:		PO Box number of the sender
+sent_time:				The time at which the message was sent
+message_unlocked:		Boolean indicating if the message has been unlocked yet. If not, will be unlocked at delivery time of recipient
+message_read:			Boolean indicating if the recipient has opened the message yet
+//Planned:
+//template:				Template id for rendering the message
+//lines[]:				Array of content lines used for displaying in a template
+//files[]:				Array of associated files

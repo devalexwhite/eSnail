@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+	head
+		title PO Box
+	body
+		h1 Welcome, #{user_firstName}.
+		h2 Here are your messages:
+		ul
+			each message, i in user_messages
+				li
+					h3=message.title
+					p=message.sent_time
+					p=message.content
+					if message.message_read
+						p Read
+					else
+						p Unread
+					if message.message_unlocked
+						p Unlocked
+					else
+						p Locked

@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/toaster99/eSnail#readme",
   "dependencies": {
+    "moment": "^2.13.0",
+    "mongoose": "^4.4.14",
     "password-hash-and-salt": "^0.1.3"
   }
 }
