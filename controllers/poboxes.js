@@ -173,98 +173,12 @@ module.exports = function(app,express,db)
 	//Query database for zipcode, create if not exists.
 	//Parameters: zipcode - The zipcode to check
 	//Returns: String in format of HH:MM that marks 24h format for delivery time
-	app.get('/poboxes/getDeliveryTime/:zipcode', function (req, res, next) {
-
-		Location.findOne({zip_code: req.params.zipcode}).exec(function(err, result)
+	app.get('/poboxes/getDeliveryTime/:zip_code', function (req, res, next) {
+		Location.getDeliveryTimeByZip(req.params.zip_code, function(location)
 		{
-			if(err)
-				throw err;
-			if(result)
-			{
-				console.log(result.delivery_time);
-			}
-			else
-			{
-				console.log("Creating new location record");
-
-				//Generate the delivery time. Delivery time is in 24hr format. Minutes can be:
-				//:00
-				//:15
-				//:30
-				//:45
-				var deliverytimeHour = Math.floor(Math.random() * 24);
-				var deliverytimeMinutes = Math.floor(Math.random() * 3);
-				deliverytimeMinutes = deliverytimeMinutes * 15;
-				var deliveryTimeString = deliverytimeHour + ':' + deliverytimeMinutes;
-
-				var newLocation = Location(
-				{
-					"zip_code": req.params.zipcode,
-					"delivery_time": deliveryTimeString
-				});
-
-				newLocation.save(function(err)
-				{
-					if(err)
-						throw err;
-
-					console.log("Saved delivery time. Zip: " + newLocation.zip_code + " Time: " + newLocation.delivery_time);
-				});
-			}
+			res.send(location.delivery_time);
 		});
 
-		// if(deliveryWindows_Collection)
-		// {
-		// 	//Search for the zipcode
-		// 	var document = deliveryWindows_Collection.findOne({zipcode: req.params.zipcode},function(err,document)
-		// 	{
-		// 			if(document)
-		// 			{
-		// 				//Document found, return delivery window
-		// 				console.log(document);
-		// 				console.log(document.zipcode + ',' + document.deliverytime + 'EST');
-		// 			}
-		// 			else
-		// 			{
-		// 				//Document not found, create it
-		// 				console.log("Creating document");
-
-		// 				//Generate the delivery time. Delivery time is in 24hr format. Minutes can be:
-		// 				//:00
-		// 				//:15
-		// 				//:30
-		// 				//:45
-		// 				var deliverytimeHour = Math.floor(Math.random() * 24);
-		// 				var deliverytimeMinutes = Math.floor(Math.random() * 3);
-		// 				deliverytimeMinutes = deliverytimeMinutes * 15;
-		// 				var deliveryTimeString = deliverytimeHour + ':' + deliverytimeMinutes;
-
-		// 				var document = {
-		// 					zipcode: req.params.zipcode, 
-		// 					deliverytime: deliveryTimeString, 
-		// 					deliveryHour: deliverytimeHour, 
-		// 					deliveryMinutes: deliverytimeMinutes, 
-		// 					createdDate: Date.now()
-		// 				};
-
-		// 				deliveryWindows_Collection.insert(document, function(err,result)
-		// 				{
-		// 					if(!err)
-		// 					{
-		// 						console.log("Created new zipcode entry.");
-		// 						console.log(document);
-		// 					}
-		// 					else
-		// 					{
-		// 						console.log("Error inserting zipcode entry");
-		// 						console.log(err);
-		// 					}
-		// 				});
-		// 			}
-		// 	});
-			
-
-		// }
 	});
 
 }
