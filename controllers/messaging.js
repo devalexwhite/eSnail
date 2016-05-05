@@ -1,14 +1,29 @@
+//Validator is used to validate and serialize data
+var validator = require('validator');
+
+//Misc functions
 var helperFunctions = require('../helpers.js');
-var MessageFactory = require('../Models/Messages.js');
+
+//POBox model
+var POBox = require('../models/POBox.js');
+
+//Location model
+var Location = require('../models/Location.js');
+
+//Message model
+var Message = require('../models/Message.js');
 
 module.exports = function(app,express,db)
 {
-	app.get('/messaging/test',function(req,res)
-	{
-		var Message = new MessageFactory(20);
-		Message.testingHere();
-	});
 
+	//Sends a message from the current user's PO Box to a recipient
+	//Parameters: 		 			-			Number of messages to list
+	//				begin 			- 			Message to start list with
+	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
+	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
+	app.post('/messaging/sendMessage', helperFunctions.isAuthenticated, function(req, res) {
+		console.log(req.body.bears);
+	});
 
 	//Returns a view with all the logged in user's messages
 	//Parameters: 	count 			-			Number of messages to list

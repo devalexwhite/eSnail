@@ -67,19 +67,19 @@ module.exports = function(app,express,db)
 	//Creates new PO Box
 	//Parameters: 	first_name - First name of the user
 	//				email	   - Email address of the user
-	//			    zipcode    - Zip code of the user
+	//			    zip_code   - Zip code of the user
 	//			    password   - Password to protect the PO Box
 	app.post('/poboxes/createBox', function(req, res, next)
 	{
 		//Get POST variables
 		var first_name, 
 			email,
-			zipcode,
+			zip_code,
 			password;
 
 		first_name = req.body.first_name;
 		email = req.body.email;
-		zipcode = req.body.zipcode;
+		zip_code = req.body.zip_code;
 		password = req.body.password;
 
 
@@ -100,7 +100,7 @@ module.exports = function(app,express,db)
 		//Sanatize inputs
 		first_name = validator.escape(first_name);
 		email = validator.normalizeEmail(email);
-		zipcode = validator.escape(zipcode);
+		zip_code = validator.escape(zip_code);
 
 		//Get highest PO Box number
 		POBox.findOne({}).sort('-box_number').exec(function (err, result)
@@ -122,19 +122,25 @@ module.exports = function(app,express,db)
 					var newBox = new POBox({
 						"first_name": first_name,
 						"email": email,
-						"zip_code": zipcode,
 						"password": password,
 						"box_number": ponumber,
-						"delivery_time": "12:45"
+						"messages": []
 					});
 
-					newBox.save(function(err)
+					Location.getDeliveryTimeByZip(zip_code, function(location)
 					{
-						if(err)
-							throw err;
+						newBox.location = location;
 
-						console.log("Box saved");
+						newBox.save(function(err)
+						{
+							if(err)
+								throw err;
+
+							console.log("Box saved");
+							console.log(newBox);
+						});
 					});
+					
 				}
 				else
 				{

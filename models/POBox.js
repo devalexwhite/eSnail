@@ -9,7 +9,7 @@ var poboxSchema = new Schema({
 	password: {type: String, required: true},							//Hash of user's password
 	email: {type: String},												//User's email used for notifications and recovery
 	last_access: {type: Date},											//Time of last account access
-	messages: {type: Schema.ObjectId, ref: 'Message'},					//All messages associated with this account
+	messages: {type: [Schema.ObjectId], ref: 'Message'},					//All messages associated with this account
 	location: {type: Schema.ObjectId, ref: 'Location'}					//Associated Location object holding the zip code and delivery time
 },
 {
