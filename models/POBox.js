@@ -9,12 +9,34 @@ var poboxSchema = new Schema({
 	password: {type: String, required: true},							//Hash of user's password
 	email: {type: String},												//User's email used for notifications and recovery
 	last_access: {type: Date},											//Time of last account access
-	messages: {type: [Schema.ObjectId], ref: 'Message'},					//All messages associated with this account
-	location: {type: Schema.ObjectId, ref: 'Location'}					//Associated Location object holding the zip code and delivery time
+	messages: {type: [Schema.ObjectId], ref: 'Message'},				//All messages associated with this account
+	location: {type: Schema.ObjectId, ref: 'Location'},					//Associated Location object holding the zip code and delivery time
+	permissions: {type: [String], default: ["user"]}
 },
 {
 	timestamps: true													//Mongoose will automatically add createdAt and updatedAt
 });
+
+poboxSchema.statics.boxHasPermission = function(boxid,permission,callback)
+{
+	POBox.findById(boxid, function(err,result)
+	{
+		if(err)
+			throw err;
+		if(!result)
+			return false;
+
+		if(result.permissions.indexOf(permission) > -1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	});
+}
+
 
 //Create the model
 var POBox = mongoose.model('POBox', poboxSchema);

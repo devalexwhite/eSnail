@@ -2,13 +2,18 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//POBox model
+var POBox = require('../models/POBox.js');
+
 //Setup the Message data schema
 var messageSchema = new Schema({
-	title: {type: String, required: true},								//Title of the message
-	sender_po_box: {type: Number, required: true},						//Sender's POBox number
+	title: {type: String},												//Title of the message
+	sender_po_box: {type: Number, required:true},						//Sender's POBox number
 	content: [String],													//Array of content strings
 	template: {type: String, required: true},							//Jade template file name (excluding .js)
-	pobox: {type: Schema.ObjectId, ref: 'POBox'}						//Recipient's POBox
+	pobox: {type: Schema.ObjectId},										//Recipient's POBox
+	unlocked: {type: Boolean, default: false},							//Has the message been unlocked yet?
+	read: {type: Boolean, default: false}								//Has the message been read yet?
 },
 {
 	timestamps: true													//Mongoose will automatically add createdAt and updatedAt
@@ -24,6 +29,7 @@ var messageSchema = new Schema({
 //Returns: Location object
 messageSchema.statics.sendMessage = function(sender, recipient, title, content, template,callback)
 {
+	//Generate the message object
 	var newMessage = Message(
 	{
 		"title": title,
@@ -33,12 +39,38 @@ messageSchema.statics.sendMessage = function(sender, recipient, title, content, 
 		"template": template
 	});
 
+	//Save the message
 	newMessage.save(function(err)
 	{
 		if(err)
 			throw err;
 
-		callback(newMessage);
+		//Now we add the message to the recipients box
+		POBox.findById(newMessage.pobox, function(err, recipientBox)
+		{
+			recipientBox.messages.push(newMessage._id);
+			recipientBox.save(function(err)
+			{
+				callback(newMessage);
+				console.log(recipientBox);
+			});
+		});
+
+	});
+}
+
+//Deletes a message
+//Parameters: 	message 		-	Message object to delete
+//Returns: 		True/False depending on result
+messageSchema.statics.deleteMessage = function(message)
+{
+	var idToDelete = message._id;
+
+	message.remove(function(err)
+	{
+		if(err)
+			return false;
+		return true;
 	});
 }
 

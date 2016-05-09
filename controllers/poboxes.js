@@ -85,7 +85,6 @@ module.exports = function(app,express,db)
 
 		//Validate data
 		var isValid = true;
-		console.log("Working on email: " + email);
 		if(!validator.isEmail(email))
 		{
 			isValid = false;
