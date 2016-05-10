@@ -1,0 +1,33 @@
+doctype html
+html(lang="en")
+	head
+		title Template Manager
+	body
+		block newTemplateForm
+			h1 Register Template
+			form(name="new-template",method="post",action="/templates/create")
+				div.input
+					span.label Filename
+					br
+					input(type="text",name="template_file")
+				div.input
+					span.label Number of content lines
+					br
+					input(type="number",min="1",name="content_lines")
+				div.actions
+					input(type="submit",value="Create Template")
+		h1 Existing Templates:
+		ul
+			if template_list.length>0
+				each template, i in template_list
+					li
+						div.result_actions
+							a(href="/templates/delete/#{template._id}") Delete
+						h3 ID
+						p=template._id
+						h3 Filename
+						p=template.template_file
+						h3 Template Lines
+						p=template.content_lines
+			else
+				p No templates exist
