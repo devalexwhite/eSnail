@@ -2,14 +2,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//Message model
+var Message = require('../models/Message.js');
+
 //Setup the Template data schema
-var templateSchma = new Schema({
+var templateSchema = new Schema({
 	template_file: {type: String, required: true},			//The template file to use (excludes the .js postfix)
 	content_lines: {type: Number, required: true}			//Number of content lines the template uses
 });
 
 //Static for creating a new template
-templateSchma.statics.createTemplate = function(template_file, content_lines,callback)
+templateSchema.statics.createTemplate = function(template_file, content_lines,callback)
 {
 	var newTemplate = Template({
 		"template_file": template_file,
@@ -24,8 +27,30 @@ templateSchma.statics.createTemplate = function(template_file, content_lines,cal
 	});
 }
 
+//Return the template object from a message id, and authenticate it with user object
+templateSchema.statics.getTemplateFromMessage = function(messageID,callback)
+{
+		Message.findById(messageID, function(err,message)
+		{
+			if(err)
+				throw err;
+			if(!message)
+				callback(null);
+
+			Template.findById(message.template,function(err,template)
+			{
+				if(err)
+					throw err;
+				if(!template)
+					callback(null);
+
+				callback(template);
+			});
+		});
+}
+
 //Create the model
-var Template = mongoose.model('Template', templateSchma);
+var Template = mongoose.model('Template', templateSchema);
 
 //Export model so it can be used in our routes
 module.exports = Template;

@@ -80,13 +80,16 @@ module.exports = function(app,express,db)
 		}
 
 		//Load the current user's messages
-		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
+		POBox.findById(req.user._id,function(error,user)
 		{
-			toReturnObject.user_messages = messages;
+			Message.find({'_id':{$in: user.messages}}, function(err, messages)
+			{
+				toReturnObject.user_messages = messages;
 
 
-			//Render the inbox, providing the messages and user name
-			res.render('inbox', toReturnObject);
+				//Render the inbox, providing the messages and user name
+				res.render('inbox', toReturnObject);
+			});
 		});
 	});
 

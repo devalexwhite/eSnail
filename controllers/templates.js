@@ -21,36 +21,46 @@ module.exports = function(app,express,db)
 	//
 	//Administrative interface for managing templates, in the future this will need to be protected somehow
 	//
-	app.get('/templates/manage', function(req,res)
+	app.get('/templates/manage',helperFunctions.isAuthenticated, function(req,res)
 	{
-		Template.find({}, function(err,results)
+		POBox.boxHasPermission(req.user._id,"administrator",function(result)
 		{
-			if(err)
-				throw err;
-		
-			res.render('admin_templates',{"template_list": results});
+			if(!result)
+			{
+				res.sendStatus(403);
+				return;
+			}
+			Template.find({}, function(err,results)
+			{
+				if(err)
+					throw err;
+			
+				res.render('admin_templates',{"template_list": results});
+			});
 		});
 	});
 
 	//
 	//Administrative function to create a new template
 	//
-	app.post('/templates/create', function(req,res,next)
+	app.post('/templates/create',helperFunctions.isAuthenticated, function(req,res,next)
 	{
-
-		var template_file,
-			content_lines;
-
-		template_file = req.body.template_file;
-		content_lines = req.body.content_lines;
-
-		Template.createTemplate(template_file, content_lines, function(result)
+		POBox.boxHasPermission(req.user._id,"administrator",function(result)
 		{
-			Template.find({}, function(err,results)
+			var template_file,
+				content_lines;
+
+			template_file = req.body.template_file;
+			content_lines = req.body.content_lines;
+
+			Template.createTemplate(template_file, content_lines, function(result)
 			{
-				if(err)
-					throw err;
-				res.render('admin_templates',{"template_list": results});
+				Template.find({}, function(err,results)
+				{
+					if(err)
+						throw err;
+					res.render('admin_templates',{"template_list": results});
+				});
 			});
 		});
 	});
@@ -59,30 +69,64 @@ module.exports = function(app,express,db)
 	//
 	//Administrative function to delete a template
 	//
-	app.get('/templates/delete/:id', function(req,res,next)
+	app.get('/templates/delete/:id',helperFunctions.isAuthenticated, function(req,res,next)
 	{
-		var templateID;
-
-		templateID = req.params.id;
-
-		Template.findById(templateID, function(err,result)
+		POBox.boxHasPermission(req.user._id,"administrator",function(result)
 		{
-			if(err)
-				throw err;
-			if(result)
-			{
-				result.remove(function(err)
-				{
-					if(err)
-						throw err;
+			var templateID;
 
-				});
-				Template.find({}, function(err,results)
+			templateID = req.params.id;
+
+			Template.findById(templateID, function(err,result)
+			{
+				if(err)
+					throw err;
+				if(result)
 				{
-					if(err)
-						throw err;
-					res.render('admin_templates',{"template_list": results});
+					result.remove(function(err)
+					{
+						if(err)
+							throw err;
+
+					});
+					Template.find({}, function(err,results)
+					{
+						if(err)
+							throw err;
+						res.render('admin_templates',{"template_list": results});
+					});
+				}
+			});
+		});
+	});
+
+	//
+	//Render the template
+	//
+	app.get('/templates/render/:messageID', helperFunctions.isAuthenticated, function(req,res,next)
+	{
+		var messageID;
+
+		messageID = req.params.messageID;
+
+		//Load the current user's messages
+		POBox.findById(req.user._id,function(error,user)
+		{
+			if(user.messages.indexOf(messageID) > -1)
+			{
+				Template.getTemplateFromMessage(messageID,function(template)
+				{	
+					if(!template)
+					{
+						res.sendStatus(500);
+						return;
+					}
+					console.log(template);
 				});
+			}
+			else
+			{
+				res.sendStatus(403);
 			}
 		});
 	});

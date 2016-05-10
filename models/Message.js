@@ -10,7 +10,7 @@ var messageSchema = new Schema({
 	title: {type: String},												//Title of the message
 	sender_po_box: {type: Number, required:true},						//Sender's POBox number
 	content: [String],													//Array of content strings
-	template: {type: String, required: true},							//Jade template file name (excluding .js)
+	template: {type: Schema.ObjectId, required: true},							//Jade template file name (excluding .js)
 	pobox: {type: Schema.ObjectId},										//Recipient's POBox
 	unlocked: {type: Boolean, default: false},							//Has the message been unlocked yet?
 	read: {type: Boolean, default: false}								//Has the message been read yet?

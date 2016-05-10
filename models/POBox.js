@@ -21,18 +21,19 @@ poboxSchema.statics.boxHasPermission = function(boxid,permission,callback)
 {
 	POBox.findById(boxid, function(err,result)
 	{
+		console.log("Checking for permissions: " + result.permissions);
 		if(err)
 			throw err;
 		if(!result)
-			return false;
+			callback(false);
 
 		if(result.permissions.indexOf(permission) > -1)
 		{
-			return true;
+			callback(true);
 		}
 		else
 		{
-			return false;
+			callback(false);
 		}
 	});
 }
