@@ -22,7 +22,7 @@ html(lang="en")
 				each template, i in template_list
 					li
 						div.result_actions
-							a(href="/templates/delete/#{template._id}") Delete
+							a(href="/templates/delete/" + template._id) Delete
 						h3 ID
 						p=template._id
 						h3 Filename
