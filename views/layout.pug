@@ -1,0 +1,20 @@
+//- Defines the main structure of pages (master file)
+doctype html
+html
+	head
+		//Includes found on every page
+		block global_includes
+			script(src='https://code.jquery.com/jquery-2.2.3.min.js',integrity='sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=',crossorigin='anonymous')
+			script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+			link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',rel='stylesheet')
+
+			link(href='/css/master.css',rel='stylesheet')
+		//Page-per-page includes
+		block includes
+		//Header will be inserted here
+		block header
+		//This section is used for any announcements
+		block notifications
+	body
+		block content
+		block footer

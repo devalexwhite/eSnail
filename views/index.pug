@@ -1,0 +1,23 @@
+//- Defines the index page for the site. Root level intro page
+extends ./layout.pug
+
+block includes
+	link(href='/css/index.css',rel='stylesheet')
+
+block content
+	.container
+		#pobox_banner.fullWidth_box
+			.box_row
+				h2 Reimagining snail mail
+				h1 Redefining communication
+		#about_us.fullWidth_box
+			.box_row
+				h2 We're bringing meaningful communication back
+				h1 and we want you to be part of it.
+				.row
+					.col-md-8
+						p Remember when messages were thought out and not just short 3-word sentences? We do, and we're bringing it back.
+						p With eSnail you get your own virtual PO Box number to call home. People send you messages, and those messages get delivered at a specific time everyday. You can send plain text messages, or choose from one of our many postcard themes.
+						p By taking away the instant satisfaction of modern communication, while also adding custom themes that fit your mood, we think we've created a better future for messagers everywhere.
+					#promo_image.col-md-4
+						img(src='http://placehold.it/400x400',class='img-responsive')

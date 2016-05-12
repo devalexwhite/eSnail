@@ -163,8 +163,8 @@ module.exports = function(app,express,db)
 	//				password   - The hashed password
 	app.post('/poboxes/authorizeBox', 
 		passport.authenticate('local',{
-			successRedirect: '/',
-			faileRedirect: '/',
+			successRedirect: '/pobox/',
+			faileRedirect: '/pobox/login',
 			failureFlash: false
 		})
 	);

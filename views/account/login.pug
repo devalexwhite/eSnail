@@ -1,0 +1,19 @@
+//- Defines the index page for the site. Root level intro page
+extends ./layout.pug
+
+block content
+	#status_message
+		if status_message
+			p=status_message
+	#login_form
+		form(name='pobox_login',method='post',action='/poboxes/authorizeBox')
+			.input
+				span.label Username
+				br
+				input(type="text",name="box_number")
+			.input
+				span.label Password
+				br
+				input(type="password",name="password")
+			.action
+				input(type="submit",value="Login")
