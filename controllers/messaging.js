@@ -73,22 +73,19 @@ module.exports = function(app,express,db)
 	//				begin 			- 			Message to start list with
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
-	app.get('/messaging/listMessages', helperFunctions.isAuthenticated, function(req, res) {
+	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
 		//Simplified object to return, don't want to return a users password
-		var toReturnObject = {
-			user_firstName: req.user.first_name,
-		}
-
-		//Load the current user's messages
-		POBox.findById(req.user._id,function(error,user)
+		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
 		{
-			Message.find({'_id':{$in: user.messages}}, function(err, messages)
+			//Get the time until delivery
+			POBox.timeStringUntilDelivery(req.user._id, function(result)
 			{
-				toReturnObject.user_messages = messages;
-
-
-				//Render the inbox, providing the messages and user name
-				res.render('inbox', toReturnObject);
+				//Render the inbox, providing the messages, user object, and status messages
+				res.render('./poboxes/inbox', {user: req.user, 
+					messages: messages,
+					errorMessages: req.flash('error'), 
+					time_until_delivery: result
+				});
 			});
 		});
 	});

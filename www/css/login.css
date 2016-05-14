@@ -1,0 +1,15 @@
+#signup_form
+{
+	background-color:white;
+	color:#F38630;
+}
+
+#signup
+{
+	margin-top: 20px;
+}
+
+#signup > .form-group > .form-control
+{
+	border-color: #F38630 !important;
+}

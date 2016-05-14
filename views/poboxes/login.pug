@@ -1,0 +1,55 @@
+//- Defines the index page for the site. Root level intro page
+extends ../layout.pug
+
+block includes
+	link(href='/css/login.css',rel='stylesheet')
+
+block content
+		.box_container
+			#login_form.fullWidth_box.text_box_left
+				.box_row
+					.container
+						.row
+							.col-md-4
+								h2 Access your PO Box
+							.col-md-4
+								form(name='pobox_login',method='post',action='/poboxes/login')
+									.form-group
+										label(for='box_number') PO Box number
+										input.form-control(type="text",name="box_number",placeholder='00000')
+									.form-group
+										label(for='password') Password
+										input.form-control(type="password",name="password")
+
+									input.btn.btn-primary(type="submit",value="Login")
+							.col-md-4
+			#signup_form.fullWidth_box.text_box_left
+				.box_row
+					.container
+						.row
+							.col-md-4
+								h3 Don't have a PO Box yet?
+								h2 Let's fix that
+							.col-md-4
+								form#signup(name='pobox_register',method='post',action='/poboxes/register')
+									.form-group
+										label(for='first_name') First name
+										input.form-control(type="text",name="first_name",placeholder="Ruohan")
+									.form-group
+										label(for='email') Email
+										input.form-control(type="email",name="email",placeholder="cool_ruohan@aol.com")
+									.form-group
+										label(for='country') Country
+										select.form-control(name='country')
+											each country, i in countries
+												option(value=i)=country
+									.form-group
+										label(for='zip_code') Zip code
+										input.form-control(type="text",name="zip_code",placeholder="43221")
+									.form-group
+										label(for='password') Password
+										input.form-control(type="password",name="password")
+
+									input.btn.btn-success(type='submit',value='Register')
+							.col-md-4
+						

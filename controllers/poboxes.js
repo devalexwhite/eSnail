@@ -17,6 +17,11 @@ var Location = require('../models/Location.js');
 //POBox model
 var POBox = require('../models/POBox.js');
 
+//Statics Library
+var StaticsLibrary = require('../static_data.js');
+
+//Zipcode validator library
+var i18nZipcodes = require('i18n-zipcodes');
 
 //Moment JS is used for converting strings to date objects
 var moment = require('moment');
@@ -33,7 +38,6 @@ module.exports = function(app,express,db)
 			passwordField: 'password'
 		},
 	  function(username, password, done) {
-	  	console.log(username + "," + password);
 	  	POBox.findOne({box_number: username}, function(err, pobox)
 	  	{
 	  		if(!pobox)
@@ -61,7 +65,10 @@ module.exports = function(app,express,db)
 	});
 
 	passport.deserializeUser(function(user, done) {
-	  done(null, user);
+		POBox.findById(user._id, function(err, user)
+		{
+	  		done(err, user);
+		});
 	});
 
 	//Creates new PO Box
@@ -69,18 +76,20 @@ module.exports = function(app,express,db)
 	//				email	   - Email address of the user
 	//			    zip_code   - Zip code of the user
 	//			    password   - Password to protect the PO Box
-	app.post('/poboxes/createBox', function(req, res, next)
+	app.post('/poboxes/register', function(req, res, next)
 	{
 		//Get POST variables
 		var first_name, 
 			email,
 			zip_code,
-			password;
+			password,
+			country;
 
 		first_name = req.body.first_name;
 		email = req.body.email;
 		zip_code = req.body.zip_code;
 		password = req.body.password;
+		country = req.body.country;
 
 
 		//Validate data
@@ -88,11 +97,29 @@ module.exports = function(app,express,db)
 		if(!validator.isEmail(email))
 		{
 			isValid = false;
+			req.flash('error',"Hey, that's not a valid email!");
 		}
+		if(!i18nZipcodes(country,zip_code))
+		{
+			isValid = false;
+			req.flash('error',"That zip code doesn't seem to exist in that country!");
+		}
+		if(first_name.length <= 1)
+		{
+			isValid = false;
+			req.flash('error', "Please enter your first name or we won't know what to call you!");
+		}
+		if(password.length < 5)
+		{
+			isValid = false;
+			req.flash('error',"Let's at least use 5 characters in the password!");
+		}
+
+
 
 		if(!isValid)
 		{
-			console.log("Please enter a valid email");
+			res.redirect('./login');
 			return;
 		}
 
@@ -101,14 +128,11 @@ module.exports = function(app,express,db)
 		email = validator.normalizeEmail(email);
 		zip_code = validator.escape(zip_code);
 
-		//Get highest PO Box number
-		POBox.findOne({}).sort('-box_number').exec(function (err, result)
+		POBox.randomBoxNumber(function(result)
 		{
-			var ponumber = 0;
-			if(result)
-			{
-				ponumber = result.box_number + 1;
-			}
+			var box_number = result.box_number;
+			var friendly_box_number = result.friendly_box_number;
+
 
 			//Hash the password
 			passwordHasher(password).hash(function(error,hash)
@@ -122,7 +146,9 @@ module.exports = function(app,express,db)
 						"first_name": first_name,
 						"email": email,
 						"password": password,
-						"box_number": ponumber,
+						"box_number": box_number,
+						"friendly_box_number": friendly_box_number,
+						"country": country,
 						"messages": []
 					});
 
@@ -135,37 +161,46 @@ module.exports = function(app,express,db)
 							if(err)
 								throw err;
 
-							console.log("Box saved");
-							console.log(newBox);
+							req.login(newBox, function(err)
+							{
+								if(err)
+									throw err;
+								res.redirect('./post_register');
+							});
 						});
 					});
 					
 				}
 				else
 				{
-					console.log("Error hashing password!");
+					req.flash('error',"Oh no, looks like we ran into an error. Please try again!");
+					res.redirect('./poboxes/login');
 					return;
 				}
 			});
 		});
+
 	});
 
-	app.get('/poboxes/listBoxes', function(req, res) {
-		POBox.find().sort('-box_number').exec(function(err,result)
-		{
-			res.render('test', { poboxlist:  result});
-		});
+	//Post registration page that shows box number and delivery time
+	app.get('/poboxes/post_register', helperFunctions.isAuthenticated, function(req,res)
+	{
+		res.render('./poboxes/post_register',{errorMessages: req.flash('error'),user:req.user});
 	});
 
+	//Returns the login page
+	app.get('/poboxes/login', function(req,res){
+		res.render('./poboxes/login',{errorMessages: req.flash('error'),countries: StaticsLibrary.Countries});
+	});
 
 	//Authenticates a PO Box.
 	//Parameters: 	box_number - The PO Box number
 	//				password   - The hashed password
-	app.post('/poboxes/authorizeBox', 
+	app.post('/poboxes/login', 
 		passport.authenticate('local',{
-			successRedirect: '/pobox/',
-			faileRedirect: '/pobox/login',
-			failureFlash: false
+			successRedirect: 'inbox',
+			failureRedirect: 'login',
+			failureFlash: "The POBox number or password you entered is incorrect. Let's give that another shot!"
 		})
 	);
 

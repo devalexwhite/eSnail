@@ -4,17 +4,31 @@ html
 	head
 		//Includes found on every page
 		block global_includes
+			//jQuery
 			script(src='https://code.jquery.com/jquery-2.2.3.min.js',integrity='sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=',crossorigin='anonymous')
-			script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
-			link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',rel='stylesheet')
+
+			//Bootstrap
+			script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+			script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js",crossorigin="anonymous")
+			link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",rel='stylesheet')
+
+			//Logo font (Cabin)
+			link(href='https://fonts.googleapis.com/css?family=Cabin:400,700',rel='stylesheet',type='text/css')
 
 			link(href='/css/master.css',rel='stylesheet')
 		//Page-per-page includes
 		block includes
 		//Header will be inserted here
 		block header
+			include ./headers/main_header.pug
 		//This section is used for any announcements
 		block notifications
+			if errorMessages && errorMessages.length > 0
+				each message, i in errorMessages
+					.alert.alert-danger(role='alert')=message
+
+
 	body
 		block content
 		block footer
+			include ./footers/main_footer.pug

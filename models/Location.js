@@ -5,7 +5,9 @@ var Schema = mongoose.Schema;
 //Setup the Location data schema
 var locationSchema = new Schema({
 	zip_code: {type:String, required: true},							//Location's zip code
-	delivery_time: {type:String, required: false}						//Location's delivery time
+	delivery_time: {type:String, required: false},						//Location's UTC delivery time
+	delivery_time_hour: {type: Number},									//The UTC hour of the delivery time
+	delivery_time_minute: {type: Number}								//The UTC minute of the delivery time
 },
 {
 	timestamps: true													//Mongoose will automatically add createdAt and updatedAt
@@ -42,7 +44,9 @@ locationSchema.statics.getDeliveryTimeByZip = function(zip_code, callback)
 			var newLocation = Location(
 			{
 				'zip_code': zip_code,
-				'delivery_time': deliveryTimeString
+				'delivery_time': deliveryTimeString,
+				'delivery_time_hour': deliverytimeHour,
+				'delivery_time_minute': deliverytimeMinutes
 			});
 
 			newLocation.save(function(err)

@@ -1,0 +1,70 @@
+.main_header 
+{
+	/*Left justify the content*/
+	justify-content: center;
+	align-items: center;
+
+	/*Colors*/
+	background-color: white;
+	color: black;
+
+	/*Padding*/
+	padding: 2em 4em 2em 4em;
+
+	display: flex;
+	flex-direction: row;
+
+	position: relative;
+}
+
+#logo
+{
+	flex-grow: 1;
+}
+
+#logo > a > h1
+{
+	font-family: 'Cabin', sans-serif;
+	font-size: 4em;
+	font-weight: bold;
+	color: #53545B;
+}
+
+a
+{
+	color: inherit;
+	text-decoration: none !important;
+	font-size: inherit;
+}
+
+a:hover
+{
+	color: #69D2E7;
+}
+
+#logout_bar
+{
+	flex-grow: 2;
+	text-align: right;
+	height: 100%;
+	position: relative;
+}
+
+#menu
+{
+	margin: 0px;
+}
+
+#menu > li
+{
+	list-style: none;
+	display: inline;
+	padding: 0 .3em 0 .3em;
+	font-size: 1.2em;
+}
+
+#active_item
+{
+	color: #F38630;
+	font-weight: bold;
+}

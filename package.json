@@ -25,9 +25,11 @@
   "homepage": "https://github.com/toaster99/eSnail#readme",
   "dependencies": {
     "body-parser": "^1.15.1",
+    "connect-flash": "^0.1.1",
     "express": "^4.13.4",
     "express-json": "^1.0.0",
     "express-session": "^1.13.0",
+    "i18n-zipcodes": "^1.0.1",
     "json": "^9.0.3",
     "moment": "^2.13.0",
     "mongodb": "^2.1.18",

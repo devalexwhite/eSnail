@@ -7,9 +7,5 @@ module.exports = function(app,express,db)
 	});
 
 
-	//Account routes
-	app.get('/pobox/:page', function(req,res)
-	{
-		res.render(req.params.page);
-	});
+
 }

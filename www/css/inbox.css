@@ -1,0 +1,85 @@
+#inbox_header h2
+{
+	font-size: 2em;
+}
+
+.messages_container
+{
+	font-size: 3em;
+}
+
+.messages_container h1
+{
+	font-weight: bolder;
+	color: #6E7271;
+	margin: 20px 0 20px 60px;
+}
+
+.messages_container h2 
+{
+	font-size: .5em;
+	font-weight: normal;
+
+	margin: 20px 0 20px 60px;
+}
+.messages_group
+{
+   display: -webkit-flex;
+   display: flex;
+   -webkit-align-items: left;
+   align-items: left;
+   -webkit-justify-content: left;
+   justify-content: left;
+   /* You can set flex-wrap and flex-direction individually */
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   -webkit-flex-wrap: wrap;
+   flex-wrap: wrap;
+   /* Or do it all in one line with flex flow */
+   -webkit-flex-flow: row wrap;
+   flex-flow: row wrap;
+   /* tweak the where items line up on the row */
+   /* valid values are: flex-start, flex-end, space-between, space-around, stretch */
+   -webkit-align-content: flex-end;
+   align-content: flex-end;
+
+}
+
+.message
+{
+	max-width: 600px;
+	width: 100%;
+	height: 400px;
+	background-color: #69D2E7;
+	margin: 20px 60px 20px 60px;
+	
+	position: relative;
+
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.message_footer
+{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background-color: #53545B;
+	opacity: .7;
+}
+
+.message_footer h2
+{
+	font-weight: normal;
+	color: #6E7271;
+	font-size: .5em;
+	padding: 10px 10px 10px 10px;
+	margin: 0px;
+}
+
+#no_messages
+{
+	margin: 100px 60px 100px 0px;	
+}

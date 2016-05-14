@@ -1,0 +1,18 @@
+//- Defines the index page for the site. Root level intro page
+extends ../layout.pug
+
+block includes
+	link(href='/css/post_register.css',rel='stylesheet')
+
+block content
+		.box_container
+			#registration_confirmation.fullWidth_box.image_box
+				.box_row
+					h1=user.box_number
+					h2 Here's your PO Box number! Don't lose it!
+			#continue_inbox.fullWidth_box.text_box_middle
+				.box_row
+					a(href="inbox")
+						span.glyphicon.glyphicon.glyphicon-inbox(aria-hidden='true')
+						h2 Let's check out your new PO Box
+						

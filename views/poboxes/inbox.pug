@@ -1,0 +1,26 @@
+//- Defines the index page for the site. Root level intro page
+extends ../layout.pug
+
+block includes
+	link(href='/css/inbox.css',rel='stylesheet')
+
+block content
+	.box_container
+				#inbox_header.fullWidth_box.text_box_left
+					.box_row
+						h1 #{user.first_name}, here are your messages.
+						h2 #{time_until_delivery} until new mail is delivered.
+	.messages_container
+		.messages_group
+			if messages.count > 0
+				each message, i in messages
+						.message(style="background-image: url('http://placehold.it/300x150')")
+							.message_footer
+								h2 Sent at #{message.createdAt}
+							
+						.message(style="background-image: url('http://placehold.it/300x150')")
+						.message(style="background-image: url('http://placehold.it/300x150')")
+			else
+				#no_messages
+					h1 You don't have any messages yet
+					h2 Try sending somebody a message instead!

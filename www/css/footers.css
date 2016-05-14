@@ -1,0 +1,60 @@
+.main_footer
+{
+	/*Left justify the content*/
+	justify-content: center;
+	align-items: center;
+
+	/*Colors*/
+	background-color: #53545B;
+	color: black;
+
+	/*Padding*/
+	padding: 4em 4em 2em 4em;
+
+	display: flex;
+	flex-direction: row;
+
+	position: relative;
+}
+
+
+#footer h1
+{
+	color:#6E7271;
+	font-size: 1.7em;
+}
+
+#footer h2
+{
+	color:black;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#footer h3
+{
+	color:#6E7271;
+	font-size: 1.0em;
+}
+
+#footer ul
+{
+	margin: 1em 0 0 0;
+	padding: 0;
+}
+
+#footer li
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: 1.2em;
+}
+
+#logo > h1 > a
+{
+	font-family: 'Cabin', sans-serif;
+	font-size: 2em;
+	font-weight: bold;
+	color: #6E7271;
+}

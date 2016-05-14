@@ -1,0 +1,26 @@
+//- Main header for the site
+
+link(href='/css/headers.css',rel='stylesheet')
+
+.box_container
+		#header.fullWidth_box.main_header
+			#logo
+				a(href='/')
+					h1 eSn@il
+			#logout_bar.col-sm-6
+				ul#menu
+					li#active_item 
+						a(href='/') Home
+					if user
+						li 
+							a(href='/poboxes/inbox') Inbox
+					li 
+						a(href='/faq') FAQs
+					li 
+						a(href='contact') Contact
+					if user
+						li 
+							a(href='/poboxes/logout') Logout
+					else
+						li 
+							a(href='poboxes/login') Login
