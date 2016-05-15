@@ -1,0 +1,33 @@
+#template_list
+{
+	background-color: white;
+	color: #F38630;
+}
+
+#template_list li
+{
+	list-style: none;
+
+	position: relative;
+	width: auto;
+}
+
+#template_list h1
+{
+	font-size: 2em;
+}
+
+#template_list h2
+{
+	font-size: 1.3em;
+	color:#53545B;
+}
+
+#template_list p 
+{
+	font-size: 1.5em;
+	color: black;
+
+	padding: 0px;
+	margin: 1em 0 0 0;
+}

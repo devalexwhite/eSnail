@@ -8,7 +8,7 @@ var POBox = require('../models/POBox.js');
 //Setup the Message data schema
 var messageSchema = new Schema({
 	title: {type: String},												//Title of the message
-	sender_po_box: {type: Number, required:true},						//Sender's POBox number
+	sender_po_box: {type: Schema.ObjectId, required:true},						//Sender's POBox number
 	content: [String],													//Array of content strings
 	template: {type: Schema.ObjectId, required: true},							//Jade template file name (excluding .js)
 	pobox: {type: Schema.ObjectId},										//Recipient's POBox

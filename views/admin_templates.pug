@@ -14,6 +14,18 @@ html(lang="en")
 					span.label Number of content lines
 					br
 					input(type="number",min="1",name="content_lines")
+				div.input
+					span.label Preview file
+					br
+					input(type="text",name="preview_image")
+				div.input
+					span.label Title
+					br
+					input(type="text",name="title")
+				div.input
+					span.label Short descripion
+					br
+					input(type="text",name="short_description")
 				div.actions
 					input(type="submit",value="Create Template")
 		h1 Existing Templates:
@@ -29,5 +41,9 @@ html(lang="en")
 						p=template.template_file
 						h3 Template Lines
 						p=template.content_lines
+						h3 Title
+						p=template.title
+						h3 Short description
+						p=template.short_description
 			else
 				p No templates exist

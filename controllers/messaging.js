@@ -13,8 +13,31 @@ var Location = require('../models/Location.js');
 //Message model
 var Message = require('../models/Message.js');
 
+//Template model
+var Template = require('../models/Template.js');
+
 module.exports = function(app,express,db)
 {
+	//
+	//Get handler for displaying the send message screen
+	//
+	app.get('/poboxes/compose', helperFunctions.isAuthenticated, function(req,res)
+	{
+		//Gather all available templates
+		Template.find({}, function(err,templates)
+		{
+			if(err)
+				throw err;
+			
+			console.log(templates);
+			//Render the compose screen
+			res.render('./poboxes/compose', {user: req.user, 
+				errorMessages: req.flash('error'),
+				templates: templates
+			});
+		});
+	});
+
 
 	//Sends a message from the current user's PO Box to a recipient. This
 	//Parameters: 		 	
@@ -62,7 +85,7 @@ module.exports = function(app,express,db)
 			}
 
 			//Got the box, so compose the message
-			Message.sendMessage(req.user.box_number,foundBox[0]._id,title,content_lines,template,function(message)
+			Message.sendMessage(req.user._id,foundBox[0]._id,title,content_lines,template,function(message)
 			{
 			});
 		});

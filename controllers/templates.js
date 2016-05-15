@@ -48,12 +48,18 @@ module.exports = function(app,express,db)
 		POBox.boxHasPermission(req.user._id,"administrator",function(result)
 		{
 			var template_file,
-				content_lines;
+				content_lines,
+				preview_image,
+				title,
+				short_description;
 
 			template_file = req.body.template_file;
 			content_lines = req.body.content_lines;
+			preview_image = req.body.preview_image;
+			title = req.body.title;
+			short_description = req.body.short_description;
 
-			Template.createTemplate(template_file, content_lines, function(result)
+			Template.createTemplate(template_file, content_lines, preview_image,title, short_description, function(result)
 			{
 				Template.find({}, function(err,results)
 				{

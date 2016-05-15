@@ -58,6 +58,7 @@ body
 	font-family: "Montserrat","Helvetica Neue",Helvetica,sans-serif;
 }
 
+/* Used for displaying a background image banner */
 .image_box 
 {
 	/*Center the content in the flexbox*/
@@ -74,6 +75,40 @@ body
 	height: 25em;
 }
 
+/* Used as a action bar with center aligned icons */
+.action_box 
+{
+	/*Center the content in the flexbox*/
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	/*Colors*/
+	color: #6E7271;
+	background-color: #E8E8E8;
+
+	/*Padding*/
+	padding: .2em .3em .4em .3em;
+
+	/*Font options*/
+	font-size: 2.3em;
+}
+
+.action_icon:hover
+{
+	color: #F38630;
+}
+
+.action_icon > p
+{
+	font-size: .5em;
+	padding: 0px;
+	margin: 0px;
+	line-height: .5em;
+}
+
+
+/* Information text box bar with text left aligned */
 .text_box_left 
 {
 	/*Left justify the content*/
@@ -89,6 +124,7 @@ body
 	padding: 40px 60px 40px 60px;
 }
 
+/* Information text box bar with text middle aligned */
 .text_box_middle
 {
 	/*Left justify the content*/
