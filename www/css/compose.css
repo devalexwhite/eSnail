@@ -1,15 +1,35 @@
+/* Style the list holding the available templates */
 #template_list
 {
 	background-color: white;
 	color: #F38630;
 }
 
+#template_list ul
+{
+	padding: 0px;
+	margin: 0px;
+}
+
 #template_list li
 {
 	list-style: none;
 
-	position: relative;
-	width: auto;
+	display: inline-block;
+
+	width: 300px;
+
+	margin: 0 10px 0 10px;
+}
+
+#template_list:first-child
+{
+	margin: 0 10px 0 0;
+}
+
+#template_list:last-child
+{
+	margin: 0 0 0 10px;
 }
 
 #template_list h1
