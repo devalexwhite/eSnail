@@ -9,22 +9,5 @@ block content
 		#compose_header.fullWidth_box.text_box_left
 			.box_row
 				h1 Write
-		#compose_header.fullWidth_box.text_box_left
+		#template_composer.fullWidth_box.text_box_middle
 			.box_row
-				h1 Style
-		#template_list.fullWidth_box.text_box_left
-			.box_row
-				if templates
-					ul
-						each template, i in templates
-							li.selected
-								div
-									img(src='http://placehold.it/300x300')
-									h1=template.title
-									if template.stamp_cost > 0
-										h2 Cost: #{template.stamp_cost} stamps
-									else
-										h2 Cost: Free!
-									p=template.short_description
-				else
-					h1 Oh no, somebody (Alex) forgot to make the templates available...
