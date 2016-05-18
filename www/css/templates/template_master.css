@@ -1,0 +1,43 @@
+#template_wrapper
+{
+	width: 100%;
+
+	border-style: solid;
+	border-color: #53545B;
+	border-width: 2px;
+
+	display: inline-block;
+	position: relative;
+}
+
+#template_wrapper:after
+{
+	display: block;
+	content: '';
+}
+
+#template_body
+{
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+
+	/*Creates the hero image style for background images*/
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#template_header
+{
+	position: relative;
+	width: 100%;
+}
+
+#template_main
+{
+	position: relative;
+	width: 100%;
+}

@@ -214,11 +214,33 @@ module.exports = function(app,express,db)
 	//Parameters: zipcode - The zipcode to check
 	//Returns: String in format of HH:MM that marks 24h format for delivery time
 	app.get('/poboxes/getDeliveryTime/:zip_code', function (req, res, next) {
-		Location.getDeliveryTimeByZip(req.params.zip_code, function(location)
+		Location.getDeliveryTimeByZip(validator.escape(req.params.zip_code), function(location)
 		{
 			res.send(location.delivery_time);
 		});
 
+	});
+
+
+	//Searches boxes based on the parameter passed
+	app.get('/poboxes/searchBoxes',helperFunctions.isAuthenticated, function (req, res, next) {
+		var query = req.query.q;
+
+		var re = new RegExp(query,'i');
+
+		POBox.find().or([{'friendly_box_number': {$regex: re}},{'first_name': {$regex: re}}]).sort('first_name').exec(function(err, poboxes)
+		{
+			if(err)
+				throw err;
+
+			if(!poboxes)
+				return;
+
+			var resultsArray = {};
+
+
+			res.json(poboxes);
+		});
 	});
 
 }

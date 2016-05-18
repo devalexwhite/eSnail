@@ -16,7 +16,7 @@ block content
 				if templates
 					ul
 						each template, i in templates
-							li.template_object(template-id=template._id)
+							li.template_object(template-id=template.id)
 								div
 									div.template_header(style="background-image:url('http://placehold.it/300x300');")
 									h1=template.title
@@ -27,3 +27,10 @@ block content
 									p=template.short_description
 				else
 					h1 Oh no, somebody (Alex) forgot to make the templates available...
+	.box_container
+		#select_template_action.fullWidth_box.action_box
+			.box_row
+				a(href='#')
+					#select_template.action_icon
+						.glyphicon.glyphicon-ok
+						p Select style

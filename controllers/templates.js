@@ -29,7 +29,6 @@ module.exports = function(app,express,db)
 			if(err)
 				throw err;
 			
-			console.log(templates);
 			//Render the compose screen
 			res.render('./poboxes/template_list', {user: req.user, 
 				errorMessages: req.flash('error'),

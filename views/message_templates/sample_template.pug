@@ -1,7 +1,37 @@
-doctype html
-html(lang="en")
-	head
-		title Template Manager
-	body
-		block newTemplateForm
-			h1 Hello World
+//- Load the template base
+extends ./template_layout.pug
+
+//- TEMPLATE FILE
+//-
+//- TEMPLATE NAME:
+//-		sample_template
+//- TEMPLATE DESCRIPTION:
+//-		Sample template to test functionality
+//- TEMPLATE LINES:
+//-		2
+//- TEMPLATE COST:
+//-		0
+//- CREATION DATE:
+//-		5/16/2016
+//-	AUTHOR:
+//-		Alex White
+
+
+//- Template specific includes
+block template_includes
+	link(href="/css/templates/sample_template.css",rel='stylesheet')
+
+
+//- Display mode for recieved mail
+block template_content_rendered
+	#template_body
+		#template_header
+			h1.template_editable(data-role='text') Click to edit this header!
+		#template_main
+			#template_main_left
+				#template_main_left_content
+					p.template_editable Click to edit the content
+			#template_main_right
+
+//- Display mode for editing
+block template_content_edit

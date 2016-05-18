@@ -18,6 +18,8 @@ html
 			//Logo font (Cabin)
 			link(href='https://fonts.googleapis.com/css?family=Cabin:400,700',rel='stylesheet',type='text/css')
 
+			script(src='/js/master.js')
+
 			link(href='/css/master.css',rel='stylesheet')
 		//Page-per-page includes
 		block includes
@@ -26,9 +28,10 @@ html
 			include ./headers/main_header.pug
 		//This section is used for any announcements
 		block notifications
-			if errorMessages && errorMessages.length > 0
-				each message, i in errorMessages
-					.alert.alert-danger(role='alert')=message
+			#page_notification_center
+				if errorMessages && errorMessages.length > 0
+					each message, i in errorMessages
+						.alert.alert-danger(role='alert')=message
 
 
 	body
