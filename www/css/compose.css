@@ -1,33 +1,54 @@
-#template_list
+#template_composer
 {
 	background-color: white;
-	color: #F38630;
 }
 
-#template_list li
+#render_area
 {
-	list-style: none;
-
-	position: relative;
-	width: auto;
+	width: 100%;
 }
 
-#template_list h1
+#phone_warning
 {
-	font-size: 2em;
-}
-
-#template_list h2
-{
-	font-size: 1.3em;
-	color:#53545B;
-}
-
-#template_list p 
-{
-	font-size: 1.5em;
+	display: none;
 	color: black;
+	font-size: 16px;
+	font-weight: lighter;
+	padding: 10px 5px;
 
-	padding: 0px;
-	margin: 1em 0 0 0;
+	background-color: #E8E8E8;
+}
+
+@media only screen and (max-width: 767px) {
+	#phone_warning
+	{
+		display: none;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	#phone_warning
+	{
+		display: none;
+	}
+}
+
+
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+	#phone_warning
+	{
+		display: block;
+	}
+}
+
+#recipient_search
+{
+	width: 100%;
+	padding: 10px;
+	border-radius: 15px;
+	border-style: solid;
+	border-color: #53545B;
+	color:#53545B;
+	font-size: 2em;
+	text-align: center;
 }

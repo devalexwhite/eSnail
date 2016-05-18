@@ -19,6 +19,25 @@ var Template = require('../models/Template.js');
 module.exports = function(app,express,db)
 {
 	//
+	//Displays the template selector
+	//
+	app.get('/poboxes/template_list', helperFunctions.isAuthenticated, function(req,res)
+	{
+		//Gather all available templates
+		Template.find({}, function(err,templates)
+		{
+			if(err)
+				throw err;
+			
+			//Render the compose screen
+			res.render('./poboxes/template_list', {user: req.user, 
+				errorMessages: req.flash('error'),
+				templates: templates
+			});
+		});
+	});
+
+	//
 	//Administrative interface for managing templates, in the future this will need to be protected somehow
 	//
 	app.get('/templates/manage',helperFunctions.isAuthenticated, function(req,res)

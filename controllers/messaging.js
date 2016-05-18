@@ -24,16 +24,38 @@ module.exports = function(app,express,db)
 	app.get('/poboxes/compose', helperFunctions.isAuthenticated, function(req,res)
 	{
 		//Gather all available templates
-		Template.find({}, function(err,templates)
+		var template_id = validator.escape(req.query.template_id);
+
+		Template.findById(template_id, function(err,template)
 		{
-			if(err)
-				throw err;
 			
-			console.log(templates);
-			//Render the compose screen
-			res.render('./poboxes/compose', {user: req.user, 
-				errorMessages: req.flash('error'),
-				templates: templates
+			if(!template || err)
+			{
+				req.flash('error','Invalid style choosen, please try again!');
+				res.redirect('./template_list')
+				return;
+			}
+
+			//Render the template so we can send it to the compose screen
+			res.render('./message_templates/' + template.template_file, function(err,result)
+			{
+				if(err)
+					throw err;
+
+				if(!result)
+				{
+					req.flash('error','We seem to be having a problem with that template, please try another!');
+					res.redirect('./template_list')
+					return;
+				}
+				else
+				{
+					//Render the compose screen and pass along the rendered template
+					res.render('./poboxes/compose', {user: req.user, 
+						errorMessages: req.flash('error'),
+						rendered_template: result
+					});
+				}
 			});
 		});
 	});
