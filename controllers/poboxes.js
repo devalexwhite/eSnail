@@ -236,10 +236,14 @@ module.exports = function(app,express,db)
 			if(!poboxes)
 				return;
 
-			var resultsArray = {};
+			var resultsArray = [];
 
 
-			res.json(poboxes);
+			for (var i = poboxes.length - 1; i >= 0; i--) {
+				resultsArray.push({'first_name': poboxes[i].first_name, 'box_number': poboxes[i].box_number, 'id': poboxes[i]._id});
+			}
+
+			res.json(resultsArray);
 		});
 	});
 

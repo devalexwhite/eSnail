@@ -9,6 +9,10 @@ block includes
 	script(src="/js/compose.js")
 	link(href='/css/compose.css',rel='stylesheet')
 
+	//- Make Jade variables visible to JavaScript
+	script.
+		template_id="#{template_id}"
+
 block content
 	.box_container
 		#compose_header.fullWidth_box.text_box_left
@@ -26,7 +30,7 @@ block content
 				select#recipient_search(name='recipient_search')
 		#select_template_action.fullWidth_box.action_box
 			.box_row
-				a(href='#')
+				a#compose_submit(href='#')
 					#select_template.action_icon
 						.glyphicon.glyphicon-send
 						p Send

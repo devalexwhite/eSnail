@@ -26,11 +26,11 @@ block template_includes
 block template_content_rendered
 	#template_body
 		#template_header
-			h1.template_editable(data-role='text') Click to edit this header!
+			h1.template_editable(match-name='top_header') Click to edit this header!
 		#template_main
 			#template_main_left
 				#template_main_left_content
-					p.template_editable Click to edit the content
+					p.template_editable(match-name='main_paragraph') Click to edit the content
 			#template_main_right
 
 //- Display mode for editing

@@ -42,13 +42,13 @@ module.exports = function(app,express,db)
 	//
 	app.get('/templates/manage',helperFunctions.isAuthenticated, function(req,res)
 	{
-		POBox.boxHasPermission(req.user._id,"administrator",function(result)
-		{
-			if(!result)
-			{
-				res.sendStatus(403);
-				return;
-			}
+		// POBox.boxHasPermission(req.user._id,"administrator",function(result)
+		// {
+			// if(!result)
+			// {
+			// 	res.sendStatus(403);
+			// 	return;
+			// }
 			Template.find({}, function(err,results)
 			{
 				if(err)
@@ -56,7 +56,7 @@ module.exports = function(app,express,db)
 			
 				res.render('admin_templates',{"template_list": results});
 			});
-		});
+		// });
 	});
 
 	//
@@ -64,8 +64,8 @@ module.exports = function(app,express,db)
 	//
 	app.post('/templates/create',helperFunctions.isAuthenticated, function(req,res,next)
 	{
-		POBox.boxHasPermission(req.user._id,"administrator",function(result)
-		{
+		// POBox.boxHasPermission(req.user._id,"administrator",function(result)
+		// {
 			var template_file,
 				content_lines,
 				preview_image,
@@ -87,7 +87,7 @@ module.exports = function(app,express,db)
 					res.render('admin_templates',{"template_list": results});
 				});
 			});
-		});
+		// });
 	});
 
 
@@ -96,8 +96,8 @@ module.exports = function(app,express,db)
 	//
 	app.get('/templates/delete/:id',helperFunctions.isAuthenticated, function(req,res,next)
 	{
-		POBox.boxHasPermission(req.user._id,"administrator",function(result)
-		{
+		// POBox.boxHasPermission(req.user._id,"administrator",function(result)
+		// {
 			var templateID;
 
 			templateID = req.params.id;
@@ -122,7 +122,7 @@ module.exports = function(app,express,db)
 					});
 				}
 			});
-		});
+		// });
 	});
 
 	//

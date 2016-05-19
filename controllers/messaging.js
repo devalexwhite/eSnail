@@ -53,11 +53,33 @@ module.exports = function(app,express,db)
 					//Render the compose screen and pass along the rendered template
 					res.render('./poboxes/compose', {user: req.user, 
 						errorMessages: req.flash('error'),
-						rendered_template: result
+						rendered_template: result,
+						template_id: template_id
 					});
 				}
 			});
 		});
+	});
+
+	//
+	//Post handler that sends the message
+	//
+	app.post('/poboxes/compose',helperFunctions.isAuthenticated, function(req,res)
+	{
+		//Gather variables
+		var recipient_box_number,
+			template_values;
+
+		var recievedObject = JSON.parse(req.body);
+
+		recipient_box_number = recievedObject.recipient_box_number;
+		template_values = recievedObject.template_values;
+		template = recievedObject.template_id;
+
+		console.log(recipient_box_number);
+		console.log(template_values);
+		console.log(template);		
+
 	});
 
 
