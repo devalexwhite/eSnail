@@ -54,7 +54,7 @@ $(document).ready(function()
                 'template_values': valuesToSend
             };
 
-        postPackage = JSON.stringify(postPackage);
+        // postPackage = JSON.stringify(postPackage);
 
         $.ajax({
             type: 'POST',

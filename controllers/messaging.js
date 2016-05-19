@@ -70,15 +70,18 @@ module.exports = function(app,express,db)
 		var recipient_box_number,
 			template_values;
 
-		var recievedObject = JSON.parse(req.body);
+		console.log(req.body);
 
-		recipient_box_number = recievedObject.recipient_box_number;
-		template_values = recievedObject.template_values;
-		template = recievedObject.template_id;
+		// var recievedObject = JSON.parse(req.body);
 
-		console.log(recipient_box_number);
-		console.log(template_values);
-		console.log(template);		
+		// recipient_box_number = recievedObject.recipient_box_number;
+		// template_values = recievedObject.template_values;
+		// template = recievedObject.template_id;
+
+
+		// console.log(recipient_box_number);
+		// console.log(template_values);
+		// console.log(template);		
 
 	});
 
