@@ -38,7 +38,7 @@ $(document).ready(function()
         var valuesToSend = [];
 
         for (var i = editableInputs.length - 1; i >= 0; i--) {
-            valuesToSend.push({'key': editableInputs[i].attributes['match-name'].value, 'value': editableInputs[i].innerText});
+            valuesToSend.push({'key': editableInputs[i].attributes['match-name'].value,'value':editableInputs[i].innerText});
         }
 
         var recipient_box_number = $("#recipient_search").val();

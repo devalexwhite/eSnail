@@ -68,20 +68,63 @@ module.exports = function(app,express,db)
 	{
 		//Gather variables
 		var recipient_box_number,
-			template_values;
+			template_values,
+			template_id;
 
-		console.log(req.body);
+		template_id = req.body.template_id;
+		recipient_box_number = req.body.recipient_box_number;
 
-		// var recievedObject = JSON.parse(req.body);
+		//Find the template to operate on
+		Template.findById(template_id, function(err, template)
+		{
+			if(err)
+				throw err;
 
-		// recipient_box_number = recievedObject.recipient_box_number;
-		// template_values = recievedObject.template_values;
-		// template = recievedObject.template_id;
+			if(!template)
+			{
+				req.flash('error',"Hmm, something seems to be wrong with the template, please try again!");
+				res.redirect('./compose');
+			}
 
+			//Gather the content lines from the request
+			var content_lines = template.content_lines;
 
-		// console.log(recipient_box_number);
-		// console.log(template_values);
-		// console.log(template);		
+			var content = [];
+
+			//Build the key-value object to store the content
+			for(var i=0; i < content_lines; i++)
+			{
+				var cKey = req.body['template_values['+i+'][key]'];
+				var cValue = req.body['template_values['+i+'][value]'];
+
+				content.push({line_key: cKey,line_content: cValue});
+			}
+
+			//Verify the recipient
+			Template.findById(recipient_box_number, function(err,recipient)
+			{
+				if(err)
+					throw err;
+
+				if(!recipient)
+				{
+					req.flash('error',"We couldn't find the specified recipient PO Box, please try again!");
+					res.redirect('./compose');	
+				}
+
+				//Looks like we are 5x5, let's send that beautiful message
+				Message.sendMessage(req.user._id,recipient_box_number,content,template_id,function(message)
+				{
+					if(!message)
+					{
+						req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
+						res.redirect('./compose');						
+					}
+
+					console.log(message);			
+				});
+			});
+		});
 
 	});
 

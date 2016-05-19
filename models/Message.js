@@ -7,16 +7,18 @@ var POBox = require('../models/POBox.js');
 
 //Setup the Message data schema
 var messageSchema = new Schema({
-	title: {type: String},												//Title of the message
 	sender_po_box: {type: Schema.ObjectId, required:true},						//Sender's POBox number
-	content: [String],													//Array of content strings
+	content: [{
+		line_key: {type: String},
+		line_content: {type: String}
+	}],															//Array of content strings
 	template: {type: Schema.ObjectId, required: true},							//Jade template file name (excluding .js)
-	pobox: {type: Schema.ObjectId},										//Recipient's POBox
-	unlocked: {type: Boolean, default: false},							//Has the message been unlocked yet?
-	read: {type: Boolean, default: false}								//Has the message been read yet?
+	pobox: {type: Schema.ObjectId},												//Recipient's POBox
+	unlocked: {type: Boolean, default: false},									//Has the message been unlocked yet?
+	read: {type: Boolean, default: false}										//Has the message been read yet?
 },
 {
-	timestamps: true													//Mongoose will automatically add createdAt and updatedAt
+	timestamps: true															//Mongoose will automatically add createdAt and updatedAt
 });
 
 //Sends a message to the specified POBox
@@ -27,12 +29,11 @@ var messageSchema = new Schema({
 // 				template 		-	String with the template filename
 //Returns: 		Message object
 //Returns: Location object
-messageSchema.statics.sendMessage = function(sender, recipient, title, content, template,callback)
+messageSchema.statics.sendMessage = function(sender, recipient, content, template,callback)
 {
 	//Generate the message object
 	var newMessage = Message(
 	{
-		"title": title,
 		"sender_po_box": sender,
 		"content": content,
 		"pobox": recipient,
@@ -52,7 +53,6 @@ messageSchema.statics.sendMessage = function(sender, recipient, title, content, 
 			recipientBox.save(function(err)
 			{
 				callback(newMessage);
-				console.log(recipientBox);
 			});
 		});
 
