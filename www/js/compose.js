@@ -62,7 +62,7 @@ $(document).ready(function()
             data: postPackage,
             success: function(data)
             {
-
+                window.location='/poboxes/sent/' + data;
             }
         });
     });

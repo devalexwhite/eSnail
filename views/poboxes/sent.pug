@@ -1,0 +1,33 @@
+//- Defines the index page for the site. Root level intro page
+extends ../layout.pug
+
+block includes
+	//LeafletJS for the map
+	//-link(rel="stylesheet",href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css")
+	//-script(src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js")
+
+
+	script(src="/js/sent.js")
+	link(href='/css/sent.css',rel='stylesheet')
+
+	//- Make Jade variables visible to JavaScript
+	//-script.
+	//-	template_id="#{template_id}"
+
+block content
+		.box_container
+			#sent_confirmation.fullWidth_box.text_box_middle
+				.box_row
+					span.glyphicon.glyphicon.glyphicon-ok(aria-hidden='true')
+					h2 Nice! Your message is on its way.
+			#sent_time.fullWidth_box.text_box_middle
+				.box_row
+					span.glyphicon.glyphicon.glyphicon-time(aria-hidden='true')
+					h2 #{recipient_first_name} will get your message in:
+					h1 #{delivery_time}
+		#back_home_action.fullWidth_box.action_box
+			.box_row
+				a#compose_submit(href='/poboxes/inbox')
+					#go_home.action_icon
+						.glyphicon.glyphicon-inbox
+						p Inbox

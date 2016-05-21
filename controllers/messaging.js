@@ -83,7 +83,7 @@ module.exports = function(app,express,db)
 			if(!template)
 			{
 				req.flash('error',"Hmm, something seems to be wrong with the template, please try again!");
-				res.redirect('./compose');
+				res.redirect('/poboxes/compose');
 			}
 
 			//Gather the content lines from the request
@@ -101,7 +101,7 @@ module.exports = function(app,express,db)
 			}
 
 			//Verify the recipient
-			Template.findById(recipient_box_number, function(err,recipient)
+			POBox.findById(recipient_box_number, function(err,recipient)
 			{
 				if(err)
 					throw err;
@@ -109,7 +109,7 @@ module.exports = function(app,express,db)
 				if(!recipient)
 				{
 					req.flash('error',"We couldn't find the specified recipient PO Box, please try again!");
-					res.redirect('./compose');	
+					res.redirect('/poboxes/compose');	
 				}
 
 				//Looks like we are 5x5, let's send that beautiful message
@@ -118,65 +118,50 @@ module.exports = function(app,express,db)
 					if(!message)
 					{
 						req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
-						res.redirect('./compose');						
+						res.redirect('/poboxes/compose');						
 					}
 
-					console.log(message);			
+					res.send(message._id);						
 				});
 			});
 		});
 
 	});
 
-
-	//Sends a message from the current user's PO Box to a recipient. This
-	//Parameters: 		 	
-	//				recipient_box_number		- 			POBox number of recipient
-	//				title  						- 			String with message title
-	//				template					-			String with template file name
-	//				number_content_lines		-			The number of body lines in request
-	//				content_line_#				-			A line for the body, where # is the line number
-	app.post('/messaging/sendMessage',helperFunctions.isAuthenticated, function(req, res) {
-		var recipient_box_number,
-			title,
-			template,
-			number_content_lines,
-			content_lines;
-
-		//Grab variables from the body
-		recipient_box_number = req.body.recipient_box_number;
-		title = req.body.title;
-		template = req.body.template;
-		number_content_lines = req.body.number_content_lines;
-		content_lines = new Array();
-
-		//Check the variables are set
-		if(!recipient_box_number || !title || !template || !number_content_lines)
-			return;
-
-		//Sanatize inputs
-		recipient_box_number = parseInt(recipient_box_number);
-		number_content_lines = parseInt(number_content_lines);
-		title = validator.escape(title);
-
-		//Build the content object
-		for (var i=0;i<number_content_lines;i++) {
-			content_lines.push(validator.escape(req.body["content_line_" + i]));
-		}
-
-		//Load the recipient's PO Box
-		POBox.find({box_number: recipient_box_number}, function(err,foundBox)
+	app.get('/poboxes/sent/:messageID', function(req,res)
+	{
+		//Lookup the message
+		Message.findById(req.params.messageID, function(err,message)
 		{
 			if(err)
 				throw err;
-			if(!foundBox)
+
+			if(!message)
 			{
-				return;
+				req.flash('error',"Something went wrong and we can't find the message we just sent...");
+				res.redirect('/poboxes/compose');		
 			}
 
-			//Got the box, so compose the message
-			Message.sendMessage(req.user._id,foundBox[0]._id,title,content_lines,template,function(message)
+			POBox.findById(message.pobox, function(err,pobox)
 			{
+				if(err)
+					throw err;
+
+				if(!pobox)
+				{
+					req.flash('error',"Something went wrong, please try again.");
+					res.redirect('/poboxes/compose');		
+				}
+
+				POBox.timeStringUntilDelivery(pobox._id, function(result)
+				{
+					res.render('./poboxes/sent',
+					{
+						recipient_first_name: pobox.first_name,
+						delivery_time: result,
+					 	errorMessages: req.flash('error'),
+					});
+				});
 			});
 		});
 	});
@@ -187,7 +172,6 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		//Simplified object to return, don't want to return a users password
 		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
 		{
 			//Get the time until delivery

@@ -1,0 +1,17 @@
+#sent_confirmation .glyphicon
+{
+	font-size: 7em;
+	margin-bottom: .3em;
+}
+
+#sent_time
+{
+	background-color: white;
+	color: #F38630;
+}
+
+#sent_time .glyphicon
+{
+	font-size: 7em;
+	margin-bottom: .3em;
+}
