@@ -115,6 +115,52 @@ poboxSchema.statics.timeStringUntilDelivery = function(boxid, callback)
 	});
 }
 
+//Returns a JavaScript object of the next delivery time
+poboxSchema.statics.nextDeliveryTimeObject = function(boxid, callback)
+{
+	POBox.findById(boxid, function(err,box)
+	{
+		if(err)
+			throw err;
+
+		Location.findById(box.location, function(err,location)
+		{
+			if(err)
+				throw err;
+
+			var date = new Date();
+			var current_hour = date.getUTCHours();
+			var current_minutes = date.getUTCMinutes();
+			var current_total_minutes = (60 * current_hour) + current_minutes;
+
+			var location_hour = location.delivery_time_hour;
+			var location_minutes = location.delivery_time_minute;
+			var location_total_minutes = (60 * location_hour) + location_minutes;
+
+			var total_minutes_to_delivery = 0;
+
+			if(current_total_minutes <= location_total_minutes)
+			{
+				total_minutes_to_delivery = location_total_minutes - current_total_minutes;
+			}
+			else
+			{
+				total_minutes_to_delivery = (1440 - (current_total_minutes - location_total_minutes));
+			}
+
+			var hours_to_delivery = Math.floor(total_minutes_to_delivery / 60);
+			var minutes_to_delivery = total_minutes_to_delivery % 60;
+
+			var momentDate = new moment(date);
+			momentDate = momentDate.add(hours_to_delivery,'h');
+			momentDate = momentDate.add(minutes_to_delivery,'m');
+
+			callback(momentDate.toDate());
+		});
+	});
+}
+
+
 //Function that creates the random PO Box number
 poboxSchema.statics.randomBoxNumber = function(callback)
 {

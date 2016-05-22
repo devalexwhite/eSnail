@@ -16,6 +16,9 @@ var Message = require('../models/Message.js');
 //Template model
 var Template = require('../models/Template.js');
 
+//Moment JS
+var moment = require('moment');
+
 //html-pdf is used to convert the rendered message to a PDF file for the 
 //user to download
 var htmlpdf = require('html-pdf');
@@ -119,16 +122,20 @@ module.exports = function(app,express,db)
 					res.redirect('/poboxes/compose');	
 				}
 
-				//Looks like we are 5x5, let's send that beautiful message
-				Message.sendMessage(req.user._id,recipient_box_number,content,template_id,function(message)
+				//Get the next delivery time object
+				POBox.nextDeliveryTimeObject(recipient._id,function(delivery_time_object)
 				{
-					if(!message)
+					//Looks like we are 5x5, let's send that beautiful message
+					Message.sendMessage(req.user._id,recipient_box_number,content,template_id,delivery_time_object,function(message)
 					{
-						req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
-						res.redirect('/poboxes/compose');						
-					}
+						if(!message)
+						{
+							req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
+							res.redirect('/poboxes/compose');						
+						}
 
-					res.send(message._id);						
+						res.send(message._id);						
+					});
 				});
 			});
 		});
@@ -179,7 +186,7 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
+		Message.find({'_id':{$in: req.user.messages},"delivery_time": {"$lte": moment().toDate()}}, function(err, messages)
 		{
 			//Get the time until delivery
 			POBox.timeStringUntilDelivery(req.user._id, function(result)
@@ -346,12 +353,13 @@ module.exports = function(app,express,db)
 				res.render('./message_templates/' + template.template_file,
 				{
 					message_content: message.content,
-					template_mode: 'view'
+					template_mode: 'pdf'
 				}, function(err, rendered)
 				{	
+
+
 					htmlpdf.create(rendered).toBuffer(function(err,buffer)
 					{
-						console.log(new Buffer(buffer).toString());
 						if(err)
 							throw err;
 

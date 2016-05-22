@@ -11,11 +11,11 @@ var messageSchema = new Schema({
 	content: [{
 		line_key: {type: String},
 		line_content: {type: String}
-	}],															//Array of content strings
+	}],																			//Array of content strings
 	template: {type: Schema.ObjectId, required: true},							//Jade template file name (excluding .js)
 	pobox: {type: Schema.ObjectId},												//Recipient's POBox
-	unlocked: {type: Boolean, default: false},									//Has the message been unlocked yet?
-	read: {type: Boolean, default: false}										//Has the message been read yet?
+	deleted: {type: Boolean, default: false},									//Has the message expired?
+	delivery_time: {type: Date}													//When the message will be delivered
 },
 {
 	timestamps: true															//Mongoose will automatically add createdAt and updatedAt
@@ -29,7 +29,7 @@ var messageSchema = new Schema({
 // 				template 		-	String with the template filename
 //Returns: 		Message object
 //Returns: Location object
-messageSchema.statics.sendMessage = function(sender, recipient, content, template,callback)
+messageSchema.statics.sendMessage = function(sender, recipient, content, template,delivery_time_object,callback)
 {
 	//Generate the message object
 	var newMessage = Message(
@@ -37,7 +37,8 @@ messageSchema.statics.sendMessage = function(sender, recipient, content, templat
 		"sender_po_box": sender,
 		"content": content,
 		"pobox": recipient,
-		"template": template
+		"template": template,
+		"delivery_time": delivery_time_object
 	});
 
 	//Save the message
