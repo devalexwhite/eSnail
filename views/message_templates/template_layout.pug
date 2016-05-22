@@ -7,7 +7,13 @@ block global_template_includes
 block template_includes
 
 #template_wrapper
+	//- Inform JavaScript what mode we are in
+	script.
+		template_mode="#{template_mode}"
+		render_content = {}
+	if message_content
+		each line, i in message_content
+			script.
+				render_content["#{line.line_key}"] = "#{line.line_content}"
 	//The rendered content that displays when message has been recieved
 	block template_content_rendered
-	//The edit form that displays when the template is being composed
-	block template_content_edit

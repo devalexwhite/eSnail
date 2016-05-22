@@ -1,0 +1,21 @@
+//- Defines the index page for the site. Root level intro page
+extends ../layout.pug
+
+block includes
+	link(href='/css/message.css',rel='stylesheet')
+	script(src='/js/message.js')
+
+block content
+	.box_container
+		#message_header.fullWidth_box.text_box_left
+			.box_row
+				if sender_name
+					h1 #{sender_name}'s message to you.
+				else
+					h1 Message was sent by a deleted account.
+				h3 Remember, messages are deleted after being viewed, so make sure to download the PDF!
+		#phone_warning
+				p Letters too small to read? Try turning your phone sideways!
+		#message_view.fullWidth_box.text_box_middle
+			#render_area.box_row
+				#message_render !{message_render}

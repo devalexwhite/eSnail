@@ -70,7 +70,7 @@
 {
 	list-style: none;
 
-	width: 300px;
+	min-width: 300px;
 
 	margin: 0 10px 20px 10px;
 
@@ -83,9 +83,19 @@
 	overflow: hidden;
 
 	flex-grow: 1;
+
+	webkit-transition: width .5s, height .5s,padding .3s;
+    transition: width .5s, height .5s,padding .3s;
 }
 
-#message_list li > div
+
+#message_list li:hover
+{
+	padding: 2em 2em 2em 2em;
+}
+
+
+#message_list li a
 {
 	width: 100%;
 	position: relative;

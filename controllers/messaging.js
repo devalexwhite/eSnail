@@ -37,7 +37,10 @@ module.exports = function(app,express,db)
 			}
 
 			//Render the template so we can send it to the compose screen
-			res.render('./message_templates/' + template.template_file, function(err,result)
+			res.render('./message_templates/' + template.template_file,
+			{
+				template_mode: 'compose'
+			}, function(err,result)
 			{
 				if(err)
 					throw err;
@@ -54,7 +57,7 @@ module.exports = function(app,express,db)
 					res.render('./poboxes/compose', {user: req.user, 
 						errorMessages: req.flash('error'),
 						rendered_template: result,
-						template_id: template_id
+						template_id: template_id,
 					});
 				}
 			});
@@ -185,6 +188,86 @@ module.exports = function(app,express,db)
 				});
 			});
 		});
+	});
+
+
+	//
+	//Displays the message with specified messageID
+	//This is quite the process. We need to load the message, sender, template, and render the template file
+	//
+	app.get('/poboxes/message/:messageID', helperFunctions.isAuthenticated, function(req,res)
+	{
+		var messageID;
+
+		//The passed in messageID
+		messageID = req.params.messageID;
+
+		//Check that the user is the owner of the message
+		if(req.user.messages.indexOf(messageID) < 0)
+		{
+			req.flash('error',"This message doesn't seem to exist, please try again.");
+			res.redirect('/poboxes/inbox');	
+		}
+
+		//Grab the Message object
+		Message.findById(messageID, function(err, message)
+		{
+			if(err)
+				throw err;
+
+			if(!message)
+			{
+				req.flash('error',"This message doesn't seem to exist, please try again.");
+				res.redirect('/poboxes/inbox');	
+			}
+
+			//Now grab the Template object so we can load the file
+			Template.findById(message.template, function(err, template)
+			{
+				if(err)
+					throw err;
+
+				if(!template)
+				{
+					req.flash('error',"This message doesn't seem to exist, please try again.");
+					res.redirect('/poboxes/inbox');	
+				}
+
+				//Render the template file, passing in the content from the Message object
+				console.log(message.content);
+				res.render('./message_templates/' + template.template_file,
+				{
+					message_content: message.content,
+					template_mode: 'view'
+				}, function(err, rendered)
+				{
+					//Finally, find the sender so we can pass along their name
+					POBox.findById(message.sender_po_box, function(err, sender)
+					{
+						if(err)
+							throw err;
+
+						//This could happen and be acceptable if the user deleted their PO Box. Although we should probably deactivate instead of delete
+						if(!sender)
+						{
+							res.render('./poboxes/message',{
+								user: req.user,
+								errorMessages: req.flash('error'),
+								message_render: rendered
+							});
+						}	
+
+						res.render('./poboxes/message',{
+							user: req.user,
+							errorMessages: req.flash('error'),
+							message_render: rendered,
+							sender_name: sender.first_name,
+						});
+					});
+				});
+			});
+		});
+
 	});
 
 	//Deletes message with given id from current user's account

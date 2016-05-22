@@ -16,13 +16,15 @@ block content
 				if messages
 					ul
 						each message, i in messages
-							li.message_object(message-id=message.id)
-								div
-									div.message_header(style="background-image:url('http://placehold.it/300x300');")
-									h1 Sent from #00000
-									h2='On ' + moment(message.createdAt).format('MMMM Do, YYYY') + ' at ' + moment(message.createdAt).format('H:mm A')
+							li
+								a(href='/poboxes/message/' + message.id)
+									div
+										div.message_header(style="background-image:url('http://placehold.it/300x300');")
+										h1 Sent from #00000
+										h2='On ' + moment(message.createdAt).format('MMMM Do, YYYY') + ' at ' + moment(message.createdAt).format('H:mm A')
 						- val=0
-						while val< (3-(messages.length % 3))
+						- max_boxes = 10
+						while val< (max_boxes-(messages.length % max_boxes))
 							- val++
 							li.message_object
 								div

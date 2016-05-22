@@ -156,3 +156,36 @@ body
 	margin: 0px;
 	padding: 0px;
 }
+
+#phone_warning
+{
+	display: none;
+	color: black;
+	font-size: 16px;
+	font-weight: lighter;
+	padding: 10px 5px;
+
+	background-color: #E8E8E8;
+}
+
+@media only screen and (max-width: 767px) {
+	#phone_warning
+	{
+		display: none;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	#phone_warning
+	{
+		display: none;
+	}
+}
+
+
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+	#phone_warning
+	{
+		display: block;
+	}
+}
