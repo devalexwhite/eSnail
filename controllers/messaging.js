@@ -16,6 +16,10 @@ var Message = require('../models/Message.js');
 //Template model
 var Template = require('../models/Template.js');
 
+//html-pdf is used to convert the rendered message to a PDF file for the 
+//user to download
+var htmlpdf = require('html-pdf');
+
 module.exports = function(app,express,db)
 {
 	//
@@ -252,7 +256,8 @@ module.exports = function(app,express,db)
 							res.render('./poboxes/message',{
 								user: req.user,
 								errorMessages: req.flash('error'),
-								message_render: rendered
+								message_render: rendered,
+								message_id: message._id
 							});
 						}	
 
@@ -261,6 +266,7 @@ module.exports = function(app,express,db)
 							errorMessages: req.flash('error'),
 							message_render: rendered,
 							sender_name: sender.first_name,
+							message_id: message._id
 						});
 					});
 				});
@@ -298,8 +304,62 @@ module.exports = function(app,express,db)
 	});
 
 	//Sends a PDF generated from the message with given messageID
-	app.get('/poboxes/message2pdf/:messageID', helperFunctions.isAuthenticated, function(req,res)
+	app.get('/poboxes/message2pdf/:messageID',  function(req,res)
 	{
+		var messageID;
 
+		//The passed in messageID
+		messageID = req.params.messageID;
+
+		//Check that the user is the owner of the message
+		// if(req.user.messages.indexOf(messageID) < 0)
+		// {
+		// 	req.flash('error',"This message doesn't seem to exist, please try again.");
+		// 	res.redirect('/poboxes/inbox');	
+		// }
+
+		//Grab the Message object
+		Message.findById(messageID, function(err, message)
+		{
+			if(err)
+				throw err;
+
+			if(!message)
+			{
+				req.flash('error',"This message doesn't seem to exist, please try again.");
+				res.redirect('/poboxes/inbox');	
+			}
+
+			//Now grab the Template object so we can load the file
+			Template.findById(message.template, function(err, template)
+			{
+				if(err)
+					throw err;
+
+				if(!template)
+				{
+					req.flash('error',"This message doesn't seem to exist, please try again.");
+					res.redirect('/poboxes/inbox');	
+				}
+
+				//Render the template file, passing in the content from the Message object
+				res.render('./message_templates/' + template.template_file,
+				{
+					message_content: message.content,
+					template_mode: 'view'
+				}, function(err, rendered)
+				{	
+					htmlpdf.create(rendered).toBuffer(function(err,buffer)
+					{
+						console.log(new Buffer(buffer).toString());
+						if(err)
+							throw err;
+
+						res.set( 'Content-Type', 'application/pdf' );
+                  		res.send( new Buffer( buffer, 'binary' ) );
+					});
+				});
+			});
+		});
 	});
 } 
