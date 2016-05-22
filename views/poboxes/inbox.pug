@@ -13,7 +13,7 @@ block content
 	#message_list.fullWidth_box.text_box_left
 		.box_row
 			.messages_group
-				if messages
+				if messages && messages.length > 0
 					ul
 						each message, i in messages
 							li

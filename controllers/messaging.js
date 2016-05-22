@@ -234,7 +234,6 @@ module.exports = function(app,express,db)
 				}
 
 				//Render the template file, passing in the content from the Message object
-				console.log(message.content);
 				res.render('./message_templates/' + template.template_file,
 				{
 					message_content: message.content,
@@ -296,5 +295,11 @@ module.exports = function(app,express,db)
 				res.render('inbox', toReturnObject);
 			});
 		});
+	});
+
+	//Sends a PDF generated from the message with given messageID
+	app.get('/poboxes/message2pdf/:messageID', helperFunctions.isAuthenticated, function(req,res)
+	{
+
 	});
 } 

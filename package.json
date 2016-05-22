@@ -29,6 +29,7 @@
     "express": "^4.13.4",
     "express-json": "^1.0.0",
     "express-session": "^1.13.0",
+    "html-pdf": "^2.0.1",
     "i18n-zipcodes": "^1.0.1",
     "json": "^9.0.3",
     "moment": "^2.13.0",

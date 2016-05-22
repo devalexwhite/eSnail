@@ -19,3 +19,17 @@ block content
 		#message_view.fullWidth_box.text_box_middle
 			#render_area.box_row
 				#message_render !{message_render}
+		#message_action.fullWidth_box.action_box
+			.box_row
+				a.action_icon.secondary_icon(href='/poboxes/inbox')
+					#save_pdf_file.action_icon
+						.glyphicon.glyphicon-chevron-left
+						p Back
+				a.action_icon#save_pdf(href='#')
+					#save_pdf_file.action_icon
+						.glyphicon.glyphicon-download-alt
+						p Save PDF
+				a.action_icon.secondary_icon(href='#')
+					#save_pdf_file.action_icon
+						.glyphicon.glyphicon-share-alt
+						p Reply

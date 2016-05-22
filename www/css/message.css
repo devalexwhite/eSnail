@@ -8,3 +8,19 @@
 	background-color: white;
 }
 
+#message_action > .box_row
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.action_icon
+{
+	width: 4em;
+}
+
+.secondary_icon
+{
+	font-size: .8em;
+}
