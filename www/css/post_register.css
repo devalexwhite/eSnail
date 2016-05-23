@@ -35,3 +35,21 @@
 	text-decoration: none;
 	color: #53545B;
 }
+
+#delivery_time
+{
+	background-color: #F38630;
+	color: white;
+	padding: 5em 0;
+}
+
+#delivery_time > .box_row > a
+{
+	color: white;
+}
+
+#delivery_time > .box_row > span
+{
+	font-size: 6em;
+	padding-bottom: .3em;
+}

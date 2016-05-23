@@ -10,9 +10,23 @@ block content
 				.box_row
 					h1=user.box_number
 					h2 Here's your PO Box number! Don't lose it!
+			#delivery_time.fullWidth_box.text_box_middle
+				.box_row
+					span.glyphicon.glyphicon.glyphicon-time(aria-hidden='true')
+					h2 Your mail will be delivered daily at
+					
+					if delivery_time_hour < 12
+						- ampm = 'AM'
+					else
+						- ampm = 'PM'
+
+					if delivery_time_minute < 10
+						h1 #{delivery_time_hour}:0#{delivery_time_minute} #{ampm}
+					else
+						h1 #{delivery_time_hour}:#{delivery_time_minute} #{ampm}
 			#continue_inbox.fullWidth_box.text_box_middle
 				.box_row
 					a(href="inbox")
-						span.glyphicon.glyphicon.glyphicon-inbox(aria-hidden='true')
+						span.glyphicon.glyphicon.glyphicon-arrow-right(aria-hidden='true')
 						h2 Let's check out your new PO Box
 						

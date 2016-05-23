@@ -185,7 +185,17 @@ module.exports = function(app,express,db)
 	//Post registration page that shows box number and delivery time
 	app.get('/poboxes/post_register', helperFunctions.isAuthenticated, function(req,res)
 	{
-		res.render('./poboxes/post_register',{errorMessages: req.flash('error'),user:req.user});
+		Location.findById(req.user.location, function(err,location)
+		{
+			if(err)
+				throw err;
+
+			res.render('./poboxes/post_register',{
+				errorMessages: req.flash('error'),
+				user:req.user,
+				delivery_time_hour: location.delivery_time_hour,
+				delivery_time_minute: location.delivery_time_minute});
+		});
 	});
 
 	//Returns the login page
