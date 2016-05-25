@@ -11,8 +11,8 @@ var passport = require('passport')
 //Misc functions
 var helperFunctions = require('../helpers.js');
 
-//Location model
-var Location = require('../models/Location.js');
+// //Location model
+// var Location = require('../models/Location.js');
 
 //POBox model
 var POBox = require('../models/POBox.js');
@@ -81,15 +81,13 @@ module.exports = function(app,express,db)
 		//Get POST variables
 		var first_name, 
 			email,
-			zip_code,
 			password,
-			country;
+			timezone;
 
 		first_name = req.body.first_name;
 		email = req.body.email;
-		zip_code = req.body.zip_code;
 		password = req.body.password;
-		country = req.body.country;
+		timezone = req.body.timezone;
 
 
 		//Validate data
@@ -98,11 +96,6 @@ module.exports = function(app,express,db)
 		{
 			isValid = false;
 			req.flash('error',"Hey, that's not a valid email!");
-		}
-		if(!i18nZipcodes(country,zip_code))
-		{
-			isValid = false;
-			req.flash('error',"That zip code doesn't seem to exist in that country!");
 		}
 		if(first_name.length <= 1)
 		{
@@ -114,7 +107,22 @@ module.exports = function(app,express,db)
 			isValid = false;
 			req.flash('error',"Let's at least use 5 characters in the password!");
 		}
+		//Validate timezone
+		var found_timezone = false;
+		for(var i in StaticsLibrary.Timezones)
+		{
+			if(i == timezone)
+			{
+				found_timezone = true;
+				break;
+			}
+		}
 
+		if(!found_timezone)
+		{
+			isValid = false;
+			req.flash('error',"Invalid timezone, please choose one from the list!");
+		}
 
 
 		if(!isValid)
@@ -126,7 +134,6 @@ module.exports = function(app,express,db)
 		//Sanatize inputs
 		first_name = validator.escape(first_name);
 		email = validator.normalizeEmail(email);
-		zip_code = validator.escape(zip_code);
 
 		POBox.randomBoxNumber(function(result)
 		{
@@ -141,6 +148,10 @@ module.exports = function(app,express,db)
 				{
 					password = hash;
 
+					var deliverytimeHour = Math.floor(Math.random() * 9) + 8;
+					var deliverytimeMinutes = Math.floor(Math.random() * 3);
+					deliverytimeMinutes = deliverytimeMinutes * 15;
+
 					//Insert record into database
 					var newBox = new POBox({
 						"first_name": first_name,
@@ -148,27 +159,25 @@ module.exports = function(app,express,db)
 						"password": password,
 						"box_number": box_number,
 						"friendly_box_number": friendly_box_number,
-						"country": country,
-						"messages": []
+						"messages": [],
+						"timezone": timezone,
+						"delivery_time_hour": deliverytimeHour,
+						"delivery_time_minute": deliverytimeMinutes
 					});
 
-					Location.getDeliveryTimeByZip(zip_code, function(location)
+					newBox.save(function(err)
 					{
-						newBox.location = location;
+						if(err)
+							throw err;
 
-						newBox.save(function(err)
+						req.login(newBox, function(err)
 						{
 							if(err)
 								throw err;
-
-							req.login(newBox, function(err)
-							{
-								if(err)
-									throw err;
-								res.redirect('./post_register');
-							});
+							res.redirect('./post_register');
 						});
 					});
+
 					
 				}
 				else
@@ -185,22 +194,25 @@ module.exports = function(app,express,db)
 	//Post registration page that shows box number and delivery time
 	app.get('/poboxes/post_register', helperFunctions.isAuthenticated, function(req,res)
 	{
-		Location.findById(req.user.location, function(err,location)
+		POBox.nextDeliveryTimeObject(req.user._id, function(timeObject)
 		{
-			if(err)
-				throw err;
+			var delivery_time_string = timeObject.format("h:mm A");
 
 			res.render('./poboxes/post_register',{
 				errorMessages: req.flash('error'),
 				user:req.user,
-				delivery_time_hour: location.delivery_time_hour,
-				delivery_time_minute: location.delivery_time_minute});
+				delivery_time_string: delivery_time_string
+			});
 		});
 	});
 
 	//Returns the login page
 	app.get('/poboxes/login', function(req,res){
-		res.render('./poboxes/login',{errorMessages: req.flash('error'),countries: StaticsLibrary.Countries});
+		res.render('./poboxes/login',{
+			errorMessages: req.flash('error'),
+			countries: StaticsLibrary.Countries,
+			timezones: StaticsLibrary.Timezones
+		});
 	});
 
 	//Authenticates a PO Box.
@@ -218,19 +230,6 @@ module.exports = function(app,express,db)
 		req.logout();
 		res.redirect('/');
 	});
-
-
-	//Query database for zipcode, create if not exists.
-	//Parameters: zipcode - The zipcode to check
-	//Returns: String in format of HH:MM that marks 24h format for delivery time
-	app.get('/poboxes/getDeliveryTime/:zip_code', function (req, res, next) {
-		Location.getDeliveryTimeByZip(validator.escape(req.params.zip_code), function(location)
-		{
-			res.send(location.delivery_time);
-		});
-
-	});
-
 
 	//Searches boxes based on the parameter passed
 	app.get('/poboxes/searchBoxes',helperFunctions.isAuthenticated, function (req, res, next) {

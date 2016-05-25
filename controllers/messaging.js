@@ -7,8 +7,8 @@ var helperFunctions = require('../helpers.js');
 //POBox model
 var POBox = require('../models/POBox.js');
 
-//Location model
-var Location = require('../models/Location.js');
+// //Location model
+// var Location = require('../models/Location.js');
 
 //Message model
 var Message = require('../models/Message.js');
@@ -18,6 +18,7 @@ var Template = require('../models/Template.js');
 
 //Moment JS
 var moment = require('moment');
+var momentTZ = require('moment-timezone');
 
 //html-pdf is used to convert the rendered message to a PDF file for the 
 //user to download
@@ -125,6 +126,8 @@ module.exports = function(app,express,db)
 				//Get the next delivery time object
 				POBox.nextDeliveryTimeObject(recipient._id,function(delivery_time_object)
 				{
+					delivery_time_object = delivery_time_object.toDate();
+
 					//Looks like we are 5x5, let's send that beautiful message
 					Message.sendMessage(req.user._id,recipient_box_number,content,template_id,delivery_time_object,function(message)
 					{
@@ -186,14 +189,29 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		Message.find({'_id':{$in: req.user.messages},"delivery_time": {"$lte": moment().toDate()}}, function(err, messages)
+		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
 		{
+			if(err)
+				throw err;
+
+			var findMessages = [];
+
+			for(var i=0;i < messages.length;i++)
+			{
+				var messageDelivery = moment(messages[i].delivery_time);
+				if(messageDelivery <= moment())
+				{
+					findMessages.push(messages[i]);
+				}
+			}
+
+
 			//Get the time until delivery
 			POBox.timeStringUntilDelivery(req.user._id, function(result)
 			{
 				//Render the inbox, providing the messages, user object, and status messages
 				res.render('./poboxes/inbox', {user: req.user, 
-					messages: messages,
+					messages: findMessages,
 					errorMessages: req.flash('error'), 
 					time_until_delivery: result
 				});
@@ -285,7 +303,6 @@ module.exports = function(app,express,db)
 	//Deletes message with given id from current user's account
 	//Parameters: 	messageID		-			The id of the message to delete
 	app.get('/messaging/deleteMessage/:messageID', helperFunctions.isAuthenticated, function(req, res) {
-		console.log(req.user.messages);
 
 		var messageID;
 

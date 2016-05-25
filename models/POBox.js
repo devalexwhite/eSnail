@@ -2,11 +2,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Moment JS
+//Moment JS and moment timezones
 var moment = require('moment');
+var momentTZ = require('moment-timezone');
 
-//Location model
-var Location = require('../models/Location.js');
+// //Location model
+// var Location = require('../models/Location.js');
 
 //Misc functions
 var helperFunctions = require('../helpers.js');
@@ -21,8 +22,11 @@ var poboxSchema = new Schema({
 	email: {type: String},												//User's email used for notifications and recovery
 	last_access: {type: Date},											//Time of last account access
 	messages: {type: [Schema.ObjectId], ref: 'Message'},				//All messages associated with this account
-	location: {type: Schema.ObjectId, ref: 'Location'},					//Associated Location object holding the zip code and delivery time
-	permissions: {type: [String], default: ["user"]}
+	//location: {type: Schema.ObjectId, ref: 'Location'},				//Associated Location object holding the zip code and delivery time
+	permissions: {type: [String], default: ["user"]},					//Permissions the box has
+	timezone: {type: String},											//Timezone the user selected
+	delivery_time_hour: {type: Number},									//The UTC hour for the delivery time
+	delivery_time_minute: {type: Number},								//The UTC minutes for the delivery time
 },
 {
 	timestamps: true													//Mongoose will automatically add createdAt and updatedAt
@@ -57,61 +61,46 @@ poboxSchema.statics.timeStringUntilDelivery = function(boxid, callback)
 		if(err)
 			throw err;
 
-		Location.findById(box.location, function(err,location)
+		var current_time_delivery_zone = moment().tz(box.timezone);
+
+		if((current_time_delivery_zone.hour() > box.delivery_time_hour) || (current_time_delivery_zone.hour() == box.delivery_time_hour && current_time_delivery_zone.minutes() > box.delivery_time_minute))
 		{
-			if(err)
-				throw err;
+			current_time_delivery_zone.add(1,'d');
+		}
 
-			var date = new Date();
-			var current_hour = date.getUTCHours();
-			var current_minutes = date.getUTCMinutes();
-			var current_total_minutes = (60 * current_hour) + current_minutes;
+		current_time_delivery_zone.hour(box.delivery_time_hour);
+		current_time_delivery_zone.minute(box.delivery_time_minute);
 
-			var location_hour = location.delivery_time_hour;
-			var location_minutes = location.delivery_time_minute;
-			var location_total_minutes = (60 * location_hour) + location_minutes;
+		var timeDifference = moment.duration(current_time_delivery_zone.diff(moment().tz(box.timezone)));
 
-			var total_minutes_to_delivery = 0;
+		var diffHours = timeDifference.hours();
+		var diffMinutes = timeDifference.minutes();
 
-			if(current_total_minutes <= location_total_minutes)
+		var returnString = '';
+
+		if(diffHours > 0)
+		{
+			returnString += diffHours + " hour";
+
+			if(diffHours > 1)
 			{
-				total_minutes_to_delivery = location_total_minutes - current_total_minutes;
+				returnString += 's';
 			}
-			else
+			
+			returnString += " ";
+		}
+
+		if(diffMinutes > 0)
+		{
+			returnString += diffMinutes + " minute";
+
+			if(diffMinutes > 1)
 			{
-				total_minutes_to_delivery = (1440 - (current_total_minutes - location_total_minutes));
+				returnString += 's';
 			}
+		}
 
-			var hours_to_delivery = Math.floor(total_minutes_to_delivery / 60);
-			var minutes_to_delivery = total_minutes_to_delivery % 60;
-
-			var returnString = '';
-
-			if(hours_to_delivery > 0)
-			{
-				returnString += hours_to_delivery + ' hour';
-
-				if(hours_to_delivery > 1)
-					returnString += 's';
-
-				if(minutes_to_delivery > 0)
-				{
-					returnString += ' and ' + minutes_to_delivery + ' minute';
-
-					if(minutes_to_delivery > 1)
-						returnString += 's';
-				}
-			}
-			else if(minutes_to_delivery > 0)
-			{
-				returnString += minutes_to_delivery + ' minute';
-
-				if(minutes_to_delivery > 1)
-					returnString += 's';
-			}
-
-			callback(returnString);
-		});
+		callback(returnString);
 	});
 }
 
@@ -120,43 +109,18 @@ poboxSchema.statics.nextDeliveryTimeObject = function(boxid, callback)
 {
 	POBox.findById(boxid, function(err,box)
 	{
-		if(err)
-			throw err;
+		var current_time_delivery_zone = moment().tz(box.timezone);
 
-		Location.findById(box.location, function(err,location)
+		if((current_time_delivery_zone.hour() > box.delivery_time_hour) || (current_time_delivery_zone.hour() == box.delivery_time_hour && current_time_delivery_zone.minutes() > box.delivery_time_minute))
 		{
-			if(err)
-				throw err;
+			console.log("A");
+			current_time_delivery_zone = current_time_delivery_zone.add(1,'d');
+		}
 
-			var date = new Date();
-			var current_hour = date.getUTCHours();
-			var current_minutes = date.getUTCMinutes();
-			var current_total_minutes = (60 * current_hour) + current_minutes;
+		current_time_delivery_zone = current_time_delivery_zone.hour(box.delivery_time_hour);
+		current_time_delivery_zone = current_time_delivery_zone.minutes(box.delivery_time_minute);
 
-			var location_hour = location.delivery_time_hour;
-			var location_minutes = location.delivery_time_minute;
-			var location_total_minutes = (60 * location_hour) + location_minutes;
-
-			var total_minutes_to_delivery = 0;
-
-			if(current_total_minutes <= location_total_minutes)
-			{
-				total_minutes_to_delivery = location_total_minutes - current_total_minutes;
-			}
-			else
-			{
-				total_minutes_to_delivery = (1440 - (current_total_minutes - location_total_minutes));
-			}
-
-			var hours_to_delivery = Math.floor(total_minutes_to_delivery / 60);
-			var minutes_to_delivery = total_minutes_to_delivery % 60;
-
-			var momentDate = new moment(date);
-			momentDate = momentDate.add(hours_to_delivery,'h');
-			momentDate = momentDate.add(minutes_to_delivery,'m');
-
-			callback(momentDate.toDate());
-		});
+		callback(current_time_delivery_zone);
 	});
 }
 
@@ -179,7 +143,7 @@ poboxSchema.statics.randomBoxNumber = function(callback)
 		}
 		else
 		{
-			var friendly_box_number = helperFunctions.intToPONumber(box_number);
+			var friendly_box_number = helperFunctions.intToPONumber(box_number,5);
 
 			callback({box_number: box_number, friendly_box_number: friendly_box_number});
 		}
