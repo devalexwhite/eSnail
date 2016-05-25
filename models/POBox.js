@@ -6,9 +6,6 @@ var Schema = mongoose.Schema;
 var moment = require('moment');
 var momentTZ = require('moment-timezone');
 
-// //Location model
-// var Location = require('../models/Location.js');
-
 //Misc functions
 var helperFunctions = require('../helpers.js');
 
@@ -22,7 +19,6 @@ var poboxSchema = new Schema({
 	email: {type: String},												//User's email used for notifications and recovery
 	last_access: {type: Date},											//Time of last account access
 	messages: {type: [Schema.ObjectId], ref: 'Message'},				//All messages associated with this account
-	//location: {type: Schema.ObjectId, ref: 'Location'},				//Associated Location object holding the zip code and delivery time
 	permissions: {type: [String], default: ["user"]},					//Permissions the box has
 	timezone: {type: String},											//Timezone the user selected
 	delivery_time_hour: {type: Number},									//The UTC hour for the delivery time
@@ -113,7 +109,6 @@ poboxSchema.statics.nextDeliveryTimeObject = function(boxid, callback)
 
 		if((current_time_delivery_zone.hour() > box.delivery_time_hour) || (current_time_delivery_zone.hour() == box.delivery_time_hour && current_time_delivery_zone.minutes() > box.delivery_time_minute))
 		{
-			console.log("A");
 			current_time_delivery_zone = current_time_delivery_zone.add(1,'d');
 		}
 

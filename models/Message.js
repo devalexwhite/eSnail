@@ -7,12 +7,12 @@ var POBox = require('../models/POBox.js');
 
 //Setup the Message data schema
 var messageSchema = new Schema({
-	sender_po_box: {type: Schema.ObjectId, required:true},						//Sender's POBox number
+	sender_po_box: {type: Schema.ObjectId, ref:'POBox', required:true},						//Sender's POBox number
 	content: [{
 		line_key: {type: String},
 		line_content: {type: String}
 	}],																			//Array of content strings
-	template: {type: Schema.ObjectId, required: true},							//Jade template file name (excluding .js)
+	template: {type: Schema.ObjectId, ref:'POBox', required: true},							//Jade template file name (excluding .js)
 	pobox: {type: Schema.ObjectId},												//Recipient's POBox
 	deleted: {type: Boolean, default: false},									//Has the message expired?
 	delivery_time: {type: Date}													//When the message will be delivered

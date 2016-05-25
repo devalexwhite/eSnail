@@ -189,7 +189,7 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
+		Message.find({'_id':{$in: req.user.messages}}).populate('sender_po_box','friendly_box_number').exec(function(err, messages)
 		{
 			if(err)
 				throw err;
@@ -204,7 +204,6 @@ module.exports = function(app,express,db)
 					findMessages.push(messages[i]);
 				}
 			}
-
 
 			//Get the time until delivery
 			POBox.timeStringUntilDelivery(req.user._id, function(result)
@@ -223,6 +222,7 @@ module.exports = function(app,express,db)
 	//
 	//Displays the message with specified messageID
 	//This is quite the process. We need to load the message, sender, template, and render the template file
+	//or I could have found the fucking populate function earlier...damnit
 	//
 	app.get('/poboxes/message/:messageID', helperFunctions.isAuthenticated, function(req,res)
 	{
