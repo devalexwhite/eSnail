@@ -4,6 +4,37 @@ body
 	padding:0px;
 }
 
+/* Fonts and sizes used in the template */
+h1
+{
+	font-size: 3em;
+	font-weight: bolder;
+
+	margin: 0;
+}
+
+h2
+{
+	font-size: 3em;
+	font-weight: normal;
+
+	margin: 0;
+}
+
+h3
+{
+	font-size: 2.3em;
+	margin: .2em 0 0 0;
+	padding: 0;
+}
+
+p
+{
+	font-size: 1.3em;
+	font-weight: lighter;
+}
+
+
 .box_container
 {
 	position: relative;
@@ -29,34 +60,6 @@ body
 
 	/*Padding options*/
 	padding: 1em .5em 1em .5em;
-}
-
-.fullWidth_box h1
-{
-	font-size: 3em;
-	font-weight: bolder;
-
-	margin: 0;
-}
-
-.fullWidth_box h2
-{
-	font-size: 3em;
-	font-weight: normal;
-
-	margin: 0;
-}
-
-.fullWidth_box h3
-{
-	margin: .2em 0 0 0;
-	padding: 0;
-}
-
-.fullWidth_box p
-{
-	font-size: 1.5em;
-	font-weight: lighter;
 }
 
 .fullWidth_box > .box_row
@@ -188,4 +191,26 @@ body
 	{
 		display: block;
 	}
+}
+
+#info_icons
+{
+	text-align: center;
+	margin: 2em 0;
+}
+
+#info_icons .col-md-4
+{
+
+}
+
+#info_icons h3
+{
+	color:#6E7271;
+}
+
+#info_icons span
+{
+	color: #F38630;
+	font-size: 7em;
 }
