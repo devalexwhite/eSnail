@@ -23,10 +23,18 @@ h2
 
 h3
 {
-	font-size: 2.3em;
+	font-size: 2.0em;
 	margin: .2em 0 0 0;
 	padding: 0;
 }
+
+h4
+{
+	font-size: 1.7em;
+	margin: .2em 0 0 0;
+	padding: 0;
+}
+
 
 p
 {
@@ -34,13 +42,28 @@ p
 	font-weight: lighter;
 }
 
-
 .box_container
 {
 	position: relative;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
+
+	font-size: 11px;
+}
+
+@media only screen and (min-device-width: 480px){
+	.box_container
+	{
+		font-size: 13px;
+	}
+}
+
+@media only screen and (min-device-width: 768px){
+	.box_container
+	{
+		font-size: 14px;
+	}
 }
 
 .fullWidth_box
@@ -65,7 +88,9 @@ p
 .fullWidth_box > .box_row
 {
 	font-family: "Montserrat","Helvetica Neue",Helvetica,sans-serif;
+	width: 100%;
 }
+
 
 /* Used for displaying a background image banner */
 .image_box 
@@ -81,7 +106,7 @@ p
 	/*Colors*/
 	color: #69D2E7;
 
-	height: 25em;
+	height: 30em;
 }
 
 /* Used as a action bar with center aligned icons */
@@ -130,7 +155,7 @@ p
 	color: white;
 
 	/*Padding*/
-	padding: 40px 60px 40px 60px;
+	padding: 3em 4.5em 3em 4.5em;
 }
 
 /* Information text box bar with text middle aligned */
@@ -146,12 +171,13 @@ p
 	color: white;
 
 	/*Padding*/
-	padding: 40px 60px 40px 60px;
+	padding: 3em 4.5em 3em 4.5em;
 }
 
 .text_box_left p
 {
-	margin: 1.5em 0;
+	margin-top: 1em;
+	max-width: 40em;
 }
 
 .container
@@ -191,26 +217,4 @@ p
 	{
 		display: block;
 	}
-}
-
-#info_icons
-{
-	text-align: center;
-	margin: 2em 0;
-}
-
-#info_icons .col-md-4
-{
-
-}
-
-#info_icons h3
-{
-	color:#6E7271;
-}
-
-#info_icons span
-{
-	color: #F38630;
-	font-size: 7em;
 }

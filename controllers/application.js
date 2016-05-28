@@ -1,4 +1,5 @@
-var momenttz = require('moment-timezone');
+//Statics Library
+var StaticsLibrary = require('../static_data.js');
 
 module.exports = function(app,express,db)
 {
@@ -8,6 +9,7 @@ module.exports = function(app,express,db)
 		res.render('index',{
 			user: req.user, 
 			errorMessages: req.flash('error'),
+			timezones: StaticsLibrary.Timezones
 		});
 	});
 

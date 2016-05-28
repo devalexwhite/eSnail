@@ -210,7 +210,6 @@ module.exports = function(app,express,db)
 	app.get('/poboxes/login', function(req,res){
 		res.render('./poboxes/login',{
 			errorMessages: req.flash('error'),
-			countries: StaticsLibrary.Countries,
 			timezones: StaticsLibrary.Timezones
 		});
 	});
