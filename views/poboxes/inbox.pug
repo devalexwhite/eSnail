@@ -9,10 +9,10 @@ block content
 		#inbox_header.fullWidth_box.text_box_left
 			.box_row
 				h1 #{user.first_name}, here are your messages.
-				h2 #{time_until_delivery} until new mail is delivered.
-	#message_list.fullWidth_box.text_box_left
-		.box_row
-			.messages_group
+				h3 #{time_until_delivery} until new mail is delivered.
+				h3 Your box number is #{user.friendly_box_number}.
+		#message_list.fullWidth_box.text_box_left
+			.box_row
 				if messages && messages.length > 0
 					ul
 						each message, i in messages
@@ -22,17 +22,16 @@ block content
 										div.message_header(style="background-image:url('http://placehold.it/300x300');")
 										h1 Sent from ##{message.sender_po_box.friendly_box_number}
 										h2='On ' + moment(message.createdAt).format('MMMM Do, YYYY') + ' at ' + moment(message.createdAt).format('H:mm A')
-						- val=0
-						- max_boxes = 10
-						while val< (max_boxes-(messages.length % max_boxes))
-							- val++
-							li.message_object
-								div
+						//- - val=0
+						//- - max_boxes = 10
+						//- while val< (max_boxes-(messages.length % max_boxes))
+						//- 	- val++
+						//- 	li.message_object
+						//- 		div
 				else
 					#no_messages
 						h1 You don't have any messages yet
-						h2 Try sending somebody a message instead!
-	.box_container
+						h3 Try sending somebody a message instead!
 		#new_message_banner.fullWidth_box.action_box
 			.box_row
 				a(href='/poboxes/template_list')

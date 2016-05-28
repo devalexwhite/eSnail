@@ -1,6 +1,6 @@
 #registration_confirmation
 {
-	background-image: url('http://placehold.it/1920x450');
+	color: white;
 }
 
 #registration_confirmation h1
@@ -8,20 +8,15 @@
 	font-size: 6em;
 }
 
-#registration_confirmation h2
-{
-	font-size: 1.5em;
-}
-
 #continue_inbox
 {
-	background-color: white;
-	padding: 5em 0;
+	background-color: #F38630;
+
 }
 
 #continue_inbox > .box_row > a
 {
-	color: #F38630;
+	color: white;
 }
 
 #continue_inbox > .box_row > a> span
@@ -38,9 +33,8 @@
 
 #delivery_time
 {
-	background-color: #F38630;
-	color: white;
-	padding: 5em 0;
+	background-color: white;
+	color: #F38630;
 }
 
 #delivery_time > .box_row > a

@@ -24,3 +24,25 @@ link(href='/css/headers.css',rel='stylesheet')
 					else
 						li 
 							a(href='poboxes/login') Login
+				#hamburger_icon.glyphicon.glyphicon-menu-hamburger.hidden-sm.hidden-md.hidden-lg
+#hamburger_menu
+	ul
+		li
+			h3
+				a(href='/') Home
+		li
+			h3
+				a(href='/poboxes/inbox') Inbox
+		li
+			h3
+				a(href='/faq') FAQs
+		li
+			h3
+				a(href='contact') Contact
+		li
+			if user
+				h3
+					a(href='poboxes/login') Login
+			else
+				h3
+					a(href='poboxes/login') Login

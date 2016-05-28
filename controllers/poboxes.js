@@ -38,7 +38,7 @@ module.exports = function(app,express,db)
 			passwordField: 'password'
 		},
 	  function(username, password, done) {
-	  	POBox.findOne({box_number: username}, function(err, pobox)
+	  	POBox.findOne({friendly_box_number: username}, function(err, pobox)
 	  	{
 	  		if(!pobox)
 	  		{

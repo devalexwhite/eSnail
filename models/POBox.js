@@ -67,9 +67,6 @@ poboxSchema.statics.timeStringUntilDelivery = function(boxid, callback)
 		current_time_delivery_zone.hour(box.delivery_time_hour);
 		current_time_delivery_zone.minute(box.delivery_time_minute);
 
-		console.log(current_time_delivery_zone);
-		console.log(moment().tz(box.timezone));
-
 		var timeDifference = moment.duration(current_time_delivery_zone.diff(moment().tz(box.timezone)));
 
 		var diffHours = timeDifference.hours();
