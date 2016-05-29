@@ -20,6 +20,7 @@ betaUserSchema.pre('save', function(next)
 {
 	if(this.beta_key && this.beta_key != '')
 	{
+		next();
 		return;
 	}
 
