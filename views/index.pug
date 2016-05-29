@@ -3,21 +3,60 @@ extends ./layout.pug
 
 block includes
 	link(href='/css/index.css',rel='stylesheet')
+	script(src='/js/index.js')
+
+	//Parallax library
+	script(src='/js/parallax.min.js')
 
 block content
 	.box_container
-		#pobox_banner.fullWidth_box.image_box
+		#pobox_banner.fullWidth_box.image_box(data-parallax="scroll",data-image-src="/img/home_banner.jpg")
 			.box_row
-				h2 Reimagining snail mail
-				h1 Redefining communication
+				h2 Reimagining Snail Mail
+				h1 Redefining Communication
+		//- Informational icon row
+		#info_icons.row
+			//- 
+			.col-md-4
+				span.glyphicon.glyphicon-inbox
+				h3 Virtual PO Box
+				p eSnail gives you a personal 5-digit PO Box number that's easy to remember, and protects your personal information.
+			//- 
+			.col-md-4
+				span.glyphicon.glyphicon-time
+				h3 Scheduled Message Delivery
+				p Each PO Box has a scheduled, daily delievery time. You'll know exactly when friends will recieve your messages.
+			.col-md-4
+				span.glyphicon.glyphicon-edit
+				h3 Fun Templates
+				p Have fun with your messages! eSnail has tons of beautifully designed, customizable message templates for every occasion.
 		#about_us.fullWidth_box.text_box_left
 			.box_row
-				h2 We're bringing meaningful communication back
-				h1 and we want you to be part of it.
-				.row
-					.col-md-8
-						p Remember when messages were thought out and not just short 3-word sentences? We do, and we're bringing it back.
-						p With eSnail you get your own virtual PO Box number to call home. People send you messages, and those messages get delivered at a specific time everyday. You can send plain text messages, or choose from one of our many postcard themes.
-						p By taking away the instant satisfaction of modern communication, while also adding custom themes that fit your mood, we think we've created a better future for messagers everywhere.
-					#promo_image.col-md-4
-						img(src='http://placehold.it/400x400',class='img-responsive')
+				//- h2 Stop Texting and Start Communicating.
+				h3 Want to Try eSnail?
+				h1 Join Our Beta List!
+				p eSnail isn't quite ready for the public yet, but you can join our beta and recieve <b>exclusive</b> templates when we launch!
+				//- Beta Signup
+				form#beta_signup(name='beta_signup',method='post',action='/beta/signup')
+					.input-group
+						input.form-control#bigger-input(type="email",placeholder="Email address",name="email")
+						span.input-group-btn
+							button.btn.btn-primary#bigger-btn Signup
+
+				//- form#home_signup(name='pobox_register',method='post',action='/poboxes/register')
+				//- 	.form-group
+				//- 		label(for='first_name') First name
+				//- 		input.form-control(type="text",name="first_name",placeholder="Ruohan")
+				//- 	.form-group
+				//- 		label(for='email') Email
+				//- 		input.form-control(type="email",name="email",placeholder="cool_ruohan@aol.com")
+				//- 	.form-group
+				//- 		label(for='timezone') Timezone
+				//- 		select.form-control(name='timezone')
+				//- 			each timezone, i in timezones
+				//- 				option(value=i)=timezone
+				//- 	.form-group
+				//- 		label(for='password') Password
+				//- 		input.form-control(type="password",name="password")
+
+					input.btn.btn-success(type='submit',value='Register')

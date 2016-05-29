@@ -1,8 +1,12 @@
 //Global template includes
 block global_template_includes
 	//- Master JS and CSS
-	script(src="/js/templates/template_master.js")
-	link(href="/css/templates/template_master.css",rel='stylesheet')
+	//jQuery
+	if template_mode == 'pdf'
+		script(src='https://code.jquery.com/jquery-2.2.3.min.js',integrity='sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=',crossorigin='anonymous')
+
+	script(src="http://localhost/js/templates/template_master.js")
+	link(href="http://localhost/css/templates/template_master.css",rel='stylesheet')
 //Template specific includes
 block template_includes
 

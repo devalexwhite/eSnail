@@ -19,11 +19,15 @@ extends ./template_layout.pug
 
 //- Template specific includes
 block template_includes
-	link(href="/css/templates/sample_template.css",rel='stylesheet')
+	link(href="http://localhost/css/templates/sample_template.css",rel='stylesheet')
 
 
 //- Display mode for recieved mail
 block template_content_rendered
+	//- Define default size for PDF mode
+	script.
+		template_pdfmode_width = "700px"
+		template_pdfmode_height = "300px"
 	#template_body
 		#template_header
 			h1.template_editable(match-name='top_header') Click to edit this header!

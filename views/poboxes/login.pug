@@ -39,16 +39,16 @@ block content
 										label(for='email') Email
 										input.form-control(type="email",name="email",placeholder="cool_ruohan@aol.com")
 									.form-group
-										label(for='country') Country
-										select.form-control(name='country')
-											each country, i in countries
-												option(value=i)=country
-									.form-group
-										label(for='zip_code') Zip code
-										input.form-control(type="text",name="zip_code",placeholder="43221")
+										label(for='timezone') Timezone
+										select.form-control(name='timezone')
+											each timezone, i in timezones
+												option(value=i)=timezone
 									.form-group
 										label(for='password') Password
 										input.form-control(type="password",name="password")
+									.form-group
+										label(for='betakey') Beta Key (this must match your signup email)
+										input.form-control(type="text",name="betakey")
 
 									input.btn.btn-success(type='submit',value='Register')
 							.col-md-4

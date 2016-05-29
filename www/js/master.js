@@ -13,3 +13,12 @@ var alertSystem = function() {
 		clearAlerts: clearAlerts
 	};
 }();
+
+$(document).ready(function()
+{
+	//Setup the hamburger menu
+	$("#hamburger_icon").click(function()
+	{
+		$("#hamburger_menu").slideToggle("slow");
+	});
+});

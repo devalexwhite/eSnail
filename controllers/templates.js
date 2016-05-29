@@ -146,7 +146,6 @@ module.exports = function(app,express,db)
 						res.sendStatus(500);
 						return;
 					}
-					console.log(template);
 				});
 			}
 			else

@@ -1,6 +1,6 @@
 #pobox_banner
 {
-	background-image: url('http://placehold.it/1920x450');
+	color: white;
 }
 
 #about_us > #promo_image
@@ -8,4 +8,89 @@
 	width: 100%;
 
 	text-align: center;
+}
+
+#beta_signup
+{
+	/*margin: 0 auto;*/
+	max-width: 60em;
+	margin-top: 2em;
+	margin-bottom: 1em;
+
+}
+
+
+.form-control[id="bigger-input"]
+{
+	border-radius: 10px 0 0 10px;
+	height: 4em;
+
+	font-weight: bold;
+	color: #53545B;
+}
+
+.btn[id="bigger-btn"]
+{
+	height: 4em;
+	border-radius: 0px 10px 10px 0px;
+	background-color: #69D2E7;
+	border-style: none;
+}
+
+@media only screen and (min-device-width: 480px){
+	.btn[id="bigger-btn"]
+	{
+		width: 8em;
+	}
+}
+
+
+
+#info_icons
+{
+	text-align: center;
+	margin: 4em 0;
+}
+
+#info_icons p
+{
+	padding: 0 2em 0 2em;
+	color: #53545B;
+	margin-top: 1em;
+}
+
+#info_icons .col-md-4
+{
+	margin-bottom: 4em;
+}
+
+#info_icons .col-md-4:last-child
+{
+	margin-bottom: 0em;
+}
+
+@media only screen and (min-device-width: 750px){
+	#info_icons .col-md-4
+	{
+		padding: 0 2em 0 2em;
+	}
+}
+
+@media only screen and (min-device-width: 970px){
+	#info_icons .col-md-4
+	{
+		margin-bottom: 0px;
+	}
+}
+
+
+#info_icons h3
+{
+	color:#6E7271;
+}
+
+#info_icons span
+{
+	color: #F38630;
+	font-size: 5em;
 }

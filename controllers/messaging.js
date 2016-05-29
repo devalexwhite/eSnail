@@ -7,14 +7,18 @@ var helperFunctions = require('../helpers.js');
 //POBox model
 var POBox = require('../models/POBox.js');
 
-//Location model
-var Location = require('../models/Location.js');
+// //Location model
+// var Location = require('../models/Location.js');
 
 //Message model
 var Message = require('../models/Message.js');
 
 //Template model
 var Template = require('../models/Template.js');
+
+//Moment JS
+var moment = require('moment');
+var momentTZ = require('moment-timezone');
 
 //html-pdf is used to convert the rendered message to a PDF file for the 
 //user to download
@@ -119,16 +123,22 @@ module.exports = function(app,express,db)
 					res.redirect('/poboxes/compose');	
 				}
 
-				//Looks like we are 5x5, let's send that beautiful message
-				Message.sendMessage(req.user._id,recipient_box_number,content,template_id,function(message)
+				//Get the next delivery time object
+				POBox.nextDeliveryTimeObject(recipient._id,function(delivery_time_object)
 				{
-					if(!message)
-					{
-						req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
-						res.redirect('/poboxes/compose');						
-					}
+					delivery_time_object = delivery_time_object.toDate();
 
-					res.send(message._id);						
+					//Looks like we are 5x5, let's send that beautiful message
+					Message.sendMessage(req.user._id,recipient_box_number,content,template_id,delivery_time_object,function(message)
+					{
+						if(!message)
+						{
+							req.flash('error',"Oh no, we failed to send the message! Please try again, we'll try harder this time (promise).");
+							res.redirect('/poboxes/compose');						
+						}
+
+						res.send(message._id);						
+					});
 				});
 			});
 		});
@@ -179,14 +189,28 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		Message.find({'_id':{$in: req.user.messages}}, function(err, messages)
+		Message.find({'_id':{$in: req.user.messages}}).populate('sender_po_box','friendly_box_number').exec(function(err, messages)
 		{
+			if(err)
+				throw err;
+
+			var findMessages = [];
+
+			for(var i=0;i < messages.length;i++)
+			{
+				var messageDelivery = moment(messages[i].delivery_time);
+				if(messageDelivery <= moment())
+				{
+					findMessages.push(messages[i]);
+				}
+			}
+
 			//Get the time until delivery
 			POBox.timeStringUntilDelivery(req.user._id, function(result)
 			{
 				//Render the inbox, providing the messages, user object, and status messages
 				res.render('./poboxes/inbox', {user: req.user, 
-					messages: messages,
+					messages: findMessages,
 					errorMessages: req.flash('error'), 
 					time_until_delivery: result
 				});
@@ -198,6 +222,7 @@ module.exports = function(app,express,db)
 	//
 	//Displays the message with specified messageID
 	//This is quite the process. We need to load the message, sender, template, and render the template file
+	//or I could have found the fucking populate function earlier...damnit
 	//
 	app.get('/poboxes/message/:messageID', helperFunctions.isAuthenticated, function(req,res)
 	{
@@ -278,7 +303,6 @@ module.exports = function(app,express,db)
 	//Deletes message with given id from current user's account
 	//Parameters: 	messageID		-			The id of the message to delete
 	app.get('/messaging/deleteMessage/:messageID', helperFunctions.isAuthenticated, function(req, res) {
-		console.log(req.user.messages);
 
 		var messageID;
 
@@ -346,12 +370,13 @@ module.exports = function(app,express,db)
 				res.render('./message_templates/' + template.template_file,
 				{
 					message_content: message.content,
-					template_mode: 'view'
+					template_mode: 'pdf'
 				}, function(err, rendered)
 				{	
+
+
 					htmlpdf.create(rendered).toBuffer(function(err,buffer)
 					{
-						console.log(new Buffer(buffer).toString());
 						if(err)
 							throw err;
 

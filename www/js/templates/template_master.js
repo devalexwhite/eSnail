@@ -22,4 +22,10 @@ $(document).ready(function()
 		});
 	}
 
+	if(template_mode == 'pdf')
+	{
+		$("#template_wrapper").css("width", template_pdfmode_width);
+		$("#template_wrapper").css("height",template_pdfmode_height);
+	}
+
 });

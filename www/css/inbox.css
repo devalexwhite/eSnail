@@ -1,7 +1,4 @@
-#inbox_header h2
-{
-	font-size: 2em;
-}
+
 
 .messages_container
 {
@@ -30,29 +27,12 @@
    align-items: left;
    -webkit-justify-content: left;
    justify-content: left;
-   /* You can set flex-wrap and flex-direction individually */
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   -webkit-flex-wrap: wrap;
-   flex-wrap: wrap;
-   /* Or do it all in one line with flex flow */
-   -webkit-flex-flow: row wrap;
-   flex-flow: row wrap;
-   /* tweak the where items line up on the row */
-   /* valid values are: flex-start, flex-end, space-between, space-around, stretch */
-   -webkit-align-content: flex-end;
-   align-content: flex-end;
-
 }
 
 #message_list
 {
 	background-color: white;
 	color: #F38630;
-
-	margin: 0px;
-
-	margin: 0 -10px 0 -10px;
 }
 
 #message_list ul
@@ -70,11 +50,11 @@
 {
 	list-style: none;
 
-	min-width: 300px;
+	width: 300px;
 
 	margin: 0 10px 20px 10px;
 
-	position: relative;
+	position: relative;	
 
 	cursor: pointer;
 
@@ -82,18 +62,18 @@
 
 	overflow: hidden;
 
-	flex-grow: 1;
+	/*flex-grow: 1;*/
 
-	webkit-transition: width .5s, height .5s,padding .3s;
-    transition: width .5s, height .5s,padding .3s;
+/*	webkit-transition: width .5s, height .5s,padding .3s;
+    transition: width .5s, height .5s,padding .3s;*/
 }
 
-
+/*
 #message_list li:hover
 {
 	padding: 2em 2em 2em 2em;
 }
-
+*/
 
 #message_list li a
 {
@@ -125,5 +105,5 @@
 
 #no_messages
 {
-	margin: 100px 60px 100px 0px;	
+	margin-bottom: 20em;
 }

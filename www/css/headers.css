@@ -68,3 +68,28 @@ a:hover
 	color: #F38630;
 	font-weight: bold;
 }
+
+#hamburger_icon
+{
+	font-size: 30px;
+	color: #53545B;
+	cursor: pointer;
+}
+
+#hamburger_menu
+{
+	background-color: #53545B;
+	color:white;
+	width: 100%;
+	padding: 1em 0em 1em 0em;
+	z-index: 10;
+
+	display: none;
+	position: absolute;
+}
+
+#hamburger_menu li
+{
+	list-style: none;
+	margin: 2em 0;
+}

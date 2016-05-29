@@ -1,15 +1,15 @@
 .main_footer
 {
 	/*Left justify the content*/
-	justify-content: center;
-	align-items: center;
+	justify-content: left;
+	align-items: left;
 
 	/*Colors*/
 	background-color: #53545B;
 	color: black;
 
 	/*Padding*/
-	padding: 4em 4em 2em 4em;
+	padding: 3em 4.5em 3em 4.5em;
 
 	display: flex;
 	flex-direction: row;
@@ -40,7 +40,14 @@
 #footer ul
 {
 	margin: 1em 0 0 0;
-	padding: 0;
+	padding: 0 0 2em 0;
+}
+
+@media only screen and (min-device-width: 750px){
+	#footer ul
+	{
+		padding:0;
+	}
 }
 
 #footer li
