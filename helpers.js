@@ -22,8 +22,7 @@ helpers.prototype.isAuthenticated = function (req, res, next) {
 		return next();
 	}
 	req.flash('error',"You must be logged in to do that!");
-	res.render('./poboxes/login',{errorMessages: req.flash('error'),countries: StaticsLibrary.Countries});
-	next();
+	res.redirect('/poboxes/login');
 }
 
 module.exports = new helpers();
