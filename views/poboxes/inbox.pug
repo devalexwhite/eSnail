@@ -8,9 +8,8 @@ block content
 	.box_container
 		#inbox_header.fullWidth_box.text_box_left
 			.box_row
-				h1 #{user.first_name}, here are your messages.
+				h1 Messages for PO Box ##{user.friendly_box_number}
 				h3 #{time_until_delivery} until new mail is delivered.
-				h3 Your box number is #{user.friendly_box_number}.
 		#message_list.fullWidth_box.text_box_left
 			.box_row
 				if messages && messages.length > 0

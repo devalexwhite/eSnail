@@ -12,7 +12,4 @@ module.exports = function(app,express,db)
 			timezones: StaticsLibrary.Timezones
 		});
 	});
-
-
-
 }

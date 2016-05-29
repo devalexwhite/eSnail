@@ -29,6 +29,9 @@ var moment = require('moment');
 //Static variables
 var PO_BOX_NUMBER_LENGTH = 5;
 
+//BetaUser library
+var BetaUser = require('../models/BetaUser.js');
+
 module.exports = function(app,express,db)
 {
 	//Configure passport
@@ -76,7 +79,7 @@ module.exports = function(app,express,db)
 	//				email	   - Email address of the user
 	//			    zip_code   - Zip code of the user
 	//			    password   - Password to protect the PO Box
-	app.post('/poboxes/register', function(req, res, next)
+	app.post('/poboxes/register', helperFunctions.betaCheck, function(req, res, next)
 	{
 		//Get POST variables
 		var first_name, 
@@ -170,11 +173,14 @@ module.exports = function(app,express,db)
 						if(err)
 							throw err;
 
-						req.login(newBox, function(err)
+						BetaUser.redeemKey(email, function()
 						{
-							if(err)
-								throw err;
-							res.redirect('./post_register');
+							req.login(newBox, function(err)
+							{
+								if(err)
+									throw err;
+								res.redirect('./post_register');
+							});	
 						});
 					});
 
@@ -227,6 +233,7 @@ module.exports = function(app,express,db)
 
 	app.get('/poboxes/logout', function(req, res) {
 		req.logout();
+		req.flash('error','You have been logged out. Have a great day!');
 		res.redirect('/');
 	});
 
