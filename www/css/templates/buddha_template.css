@@ -1,0 +1,71 @@
+#template_wrapper
+{
+	/* Declare the template sizing */
+	max-width: 43.75em;
+	max-height: 31.25em;
+
+
+	border-radius: 1em;
+	border-width: .3em;
+
+	font-size: 1vw;
+
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#template_wrapper:after
+{
+	/* This is used for the aspect ratio hack. This example gives 16:9 ratio */
+	/* This is calculated by (max-height/max-width) * 100 */
+	padding-top: 71.42%;
+}
+
+#template_body
+{
+	border-radius: 1em;
+
+	background-image: url('/img/templates/buddha_template/background.jpg');
+}
+
+#template_header
+{
+	/*height: 10%;*/
+}
+
+#template_header h1
+{
+	font-size: 3em;
+	color: #6e5739;
+	white-space: nowrap;
+	overflow: hidden;
+
+	font-weight: bolder;
+}
+
+#template_main
+{
+	/*height: 90%;*/
+	
+	text-align: left;
+	width: 100%;
+	color: black;
+
+	padding: 1em;
+	padding-right: 12em;
+	overflow: hidden;
+}
+
+#template_main p
+{
+	width: 100%;
+	height: 100%;
+
+	margin: 0;
+	padding: 0;
+
+	font-size: 2em;
+
+	font-weight: normal;
+
+	overflow:hidden;
+}

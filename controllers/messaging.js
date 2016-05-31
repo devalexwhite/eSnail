@@ -189,7 +189,7 @@ module.exports = function(app,express,db)
 	//				sort  			- 			Sort option. 0 for descending, 1 for ascending
 	//				sortParam		-			Field to sort on. 0 for sent time, 1 for read
 	app.get('/poboxes/inbox', helperFunctions.isAuthenticated, function(req, res) {
-		Message.find({'_id':{$in: req.user.messages}}).populate('sender_po_box','friendly_box_number').exec(function(err, messages)
+		Message.find({'_id':{$in: req.user.messages}}).populate('sender_po_box','friendly_box_number').populate('template','envelope_image').exec(function(err, messages)
 		{
 			if(err)
 				throw err;
@@ -262,10 +262,17 @@ module.exports = function(app,express,db)
 					res.redirect('/poboxes/inbox');	
 				}
 
+				var messageContentArray = [];
+
+				for(var i=0; i < message.content.length;i++)
+				{
+					messageContentArray[message.content[i].line_key] = message.content[i].line_content;
+				}
+
 				//Render the template file, passing in the content from the Message object
 				res.render('./message_templates/' + template.template_file,
 				{
-					message_content: message.content,
+					message_content: messageContentArray,
 					template_mode: 'view'
 				}, function(err, rendered)
 				{
