@@ -1,0 +1,72 @@
+#template_wrapper
+{
+	/* Declare the template sizing */
+	max-width: 43.75em;
+	max-height: 50em;
+
+	border-radius: 1em;
+	border-width: .3em;
+
+	font-size: 1vw;
+
+	font-family: 'Dancing Script', cursive;
+}
+
+#template_wrapper:after
+{
+	/* This is used for the aspect ratio hack. This example gives 16:9 ratio */
+	/* This is calculated by (max-height/max-width) * 100 */
+	padding-top: 114%;
+}
+
+#template_body
+{
+	border-radius: 1em;
+
+	background-image: url('/img/templates/china_letter_template/background.jpg');
+}
+
+#template_header
+{
+	/*height: 10%;*/
+}
+
+#template_header h1
+{
+	font-size: 4em;
+	color: #53545B;
+	white-space: nowrap;
+	overflow: hidden;
+
+	font-weight: bolder;
+}
+
+
+
+
+#template_main
+{
+	/*height: 90%;*/
+	
+	text-align: left;
+	width: 100%;
+	color: black;
+
+	padding: 1em;
+	overflow: hidden;
+}
+
+#template_main p
+{
+	width: 100%;
+	height: 100%;
+
+	margin: 0;
+	padding: 0;
+
+	font-size: 3em;
+
+	font-weight: normal;
+
+	overflow:hidden;
+}
