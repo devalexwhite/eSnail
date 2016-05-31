@@ -1,0 +1,54 @@
+#template_wrapper
+{
+	/* Declare the template sizing */
+	max-height: 25em;
+	max-width: 37.5em;
+
+	border-radius: 1em;
+	border-width: .3em;
+
+	font-size: 1vw;
+
+	font-family: 'Nunito', sans-serif;
+}
+
+#template_wrapper:after
+{
+	/* This is used for the aspect ratio hack. This example gives 16:9 ratio */
+	/* This is calculated by (max-height/max-width) * 100 */
+	padding-top: 66%;
+}
+
+#template_body
+{
+	border-radius: 1em;
+
+	background-image: url('/img/templates/corgi_template/background.jpg');
+}
+
+#template_main
+{
+	/*height: 90%;*/
+	
+	text-align: left;
+	width: 100%;
+	color: white;
+
+	padding: 1em;
+	overflow: hidden;
+}
+
+#template_main p
+{
+	width: 100%;
+	height: 100%;
+
+	margin: 0;
+	padding: 0;
+
+	font-size: 2em;
+
+	font-weight: normal;
+
+	overflow:hidden;
+}

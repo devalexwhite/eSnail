@@ -1,0 +1,38 @@
+//- Load the template base
+extends ./template_layout.pug
+
+//- TEMPLATE FILE
+//-
+//- TEMPLATE NAME:
+//-		Corgi Template
+//- TEMPLATE DESCRIPTION:
+//-		Template with images of Lotus
+//- TEMPLATE LINES:
+//-		2
+//- TEMPLATE COST:
+//-		0
+//- CREATION DATE:
+//-		5/30/2016
+//-	AUTHOR:
+//-		Alex White
+
+
+//- Template specific includes
+block template_includes
+	link(href="/css/templates/corgi_template.css",rel='stylesheet')
+	link(href='https://fonts.googleapis.com/css?family=Nunito',rel='stylesheet',type='text/css')
+
+//- Display mode for recieved mail
+block template_content_rendered
+	//- Define default size for PDF mode
+	script.
+		template_pdfmode_width = "600px"
+		template_pdfmode_height = "400px"
+	#template_body
+		#template_main
+			if template_mode == 'view'
+				p.template_editable(match-name='main_paragraph')=message_content['main_paragraph']
+			else
+				p.template_editable(match-name='main_paragraph') Click to edit the content and be the ultimate Corgi Lover!
+//- Display mode for editing
+block template_content_edit

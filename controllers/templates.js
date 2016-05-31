@@ -69,16 +69,18 @@ module.exports = function(app,express,db)
 			var template_file,
 				content_lines,
 				preview_image,
+				envelope_image,
 				title,
 				short_description;
 
 			template_file = req.body.template_file;
 			content_lines = req.body.content_lines;
 			preview_image = req.body.preview_image;
+			envelope_image = req.body.envelope_image;
 			title = req.body.title;
 			short_description = req.body.short_description;
 
-			Template.createTemplate(template_file, content_lines, preview_image,title, short_description, function(result)
+			Template.createTemplate(template_file, content_lines, preview_image,envelope_image,title, short_description, function(result)
 			{
 				Template.find({}, function(err,results)
 				{

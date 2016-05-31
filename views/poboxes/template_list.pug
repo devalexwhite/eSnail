@@ -18,7 +18,7 @@ block content
 						each template, i in templates
 							li.template_object(template-id=template.id)
 								div
-									div.template_header(style="background-image:url('http://placehold.it/300x300');")
+									div.template_header(style="background-image:url('/img/templates/"+template.preview_image+"');")
 									h1=template.title
 									if template.stamp_cost > 0
 										h2 Cost: #{template.stamp_cost} stamps

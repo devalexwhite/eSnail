@@ -10,18 +10,20 @@ var templateSchema = new Schema({
 	template_file: {type: String, required: true},			//The template file to use (excludes the .js postfix)
 	content_lines: {type: Number, required: true},			//Number of content lines the template uses
 	preview_image: {type: String},							//Filename of the preview image. Path is relative to /www/img/templates
+	envelope_image: {type: String},							//The image to show in the inbox
 	stamp_cost: {type: Number, default: 0},					//To be implemented, cost of the template
 	title: {type: String, required: true},					//Title of the template
 	short_description: {type:String}						//Optional short description of the template
 });
 
 //Static for creating a new template
-templateSchema.statics.createTemplate = function(template_file, content_lines,preview_image,title, short_description, callback)
+templateSchema.statics.createTemplate = function(template_file, content_lines,preview_image,envelope_image,title, short_description, callback)
 {
 	var newTemplate = Template({
 		"template_file": template_file,
 		"content_lines": content_lines,
 		"preview_image": preview_image,
+		"envelope_image": envelope_image,
 		"title": title,
 		"short_description": short_description
 	});

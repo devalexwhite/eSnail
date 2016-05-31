@@ -18,7 +18,7 @@ block content
 							li
 								a(href='/poboxes/message/' + message.id)
 									div
-										div.message_header(style="background-image:url('http://placehold.it/300x300');")
+										div.message_header(style="background-image:url('/img/templates/"+message.template.envelope_image+"');")
 										h1 Sent from ##{message.sender_po_box.friendly_box_number}
 										h2='On ' + moment(message.createdAt).format('MMMM Do, YYYY') + ' at ' + moment(message.createdAt).format('H:mm A')
 						//- - val=0

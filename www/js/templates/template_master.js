@@ -7,20 +7,20 @@ $(document).ready(function()
 		$('.template_editable').attr('contenteditable','true');
 	}
 	//Otherwise, fill the fields with the given content
-	else
-	{	
-		//Itterate through all editables
-		$('.template_editable').each(function(editable)
-		{
-			//Grab their database name
-			var fieldKey = this.getAttribute('match-name');
-			//Grab the value passed from Node
-			var matchValue = render_content[fieldKey];
+	// else
+	// {	
+	// 	//Itterate through all editables
+	// 	$('.template_editable').each(function(editable)
+	// 	{
+	// 		//Grab their database name
+	// 		var fieldKey = this.getAttribute('match-name');
+	// 		//Grab the value passed from Node
+	// 		var matchValue = render_content[fieldKey];
 
-			//Set the content
-			this.textContent = matchValue;
-		});
-	}
+	// 		//Set the content
+	// 		this.textContent = matchValue;
+	// 	});
+	// }
 
 	if(template_mode == 'pdf')
 	{

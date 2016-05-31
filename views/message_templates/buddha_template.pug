@@ -4,9 +4,9 @@ extends ./template_layout.pug
 //- TEMPLATE FILE
 //-
 //- TEMPLATE NAME:
-//-		China Letter
+//-		Corgi Template
 //- TEMPLATE DESCRIPTION:
-//-		Letter format with a paper texture and Chinese stamp in lower-right corener
+//-		Template with images of Lotus
 //- TEMPLATE LINES:
 //-		2
 //- TEMPLATE COST:
@@ -19,26 +19,25 @@ extends ./template_layout.pug
 
 //- Template specific includes
 block template_includes
-	link(href="/css/templates/china_letter_template.css",rel='stylesheet')
-	link(href='https://fonts.googleapis.com/css?family=Dancing+Script:400,700',rel='stylesheet',type='text/css')
-
+	link(href="/css/templates/buddha_template.css",rel='stylesheet')
+	link(href='https://fonts.googleapis.com/css?family=Nunito',rel='stylesheet',type='text/css')
 
 //- Display mode for recieved mail
 block template_content_rendered
 	//- Define default size for PDF mode
 	script.
-		template_pdfmode_width = "400px"
-		template_pdfmode_height = "600px"
+		template_pdfmode_width = "600px"
+		template_pdfmode_height = "400px"
 	#template_body
 		#template_header
 			if template_mode == 'view'
-				h1.template_mode_editable(match-name='top_header')=message_content['top_header']
+				h1.template_editable(match-name='main_header')=message_content['main_header']
 			else
-				h1.template_editable(match-name='top_header') Click to edit this header!
+				h1.template_editable(match-name='main_header') Click the edit the header
 		#template_main
 			if template_mode == 'view'
 				p.template_editable(match-name='main_paragraph')=message_content['main_paragraph']
 			else
-				p.template_editable(match-name='main_paragraph') Click to edit the content
+				p.template_editable(match-name='main_paragraph') Click to edit the content. May peace be with you.
 //- Display mode for editing
 block template_content_edit
