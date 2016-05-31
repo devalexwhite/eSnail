@@ -5,8 +5,8 @@ block global_template_includes
 	if template_mode == 'pdf'
 		script(src='https://code.jquery.com/jquery-2.2.3.min.js',integrity='sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=',crossorigin='anonymous')
 
-	script(src="http://localhost/js/templates/template_master.js")
-	link(href="http://localhost/css/templates/template_master.css",rel='stylesheet')
+	script(src="/js/templates/template_master.js")
+	link(href="/css/templates/template_master.css",rel='stylesheet')
 //Template specific includes
 block template_includes
 
@@ -18,6 +18,6 @@ block template_includes
 	if message_content
 		each line, i in message_content
 			script.
-				render_content["#{line.line_key}"] = "#{line.line_content}"
+				render_content["#{line.line_key}"] = "#{line.line_content}";
 	//The rendered content that displays when message has been recieved
 	block template_content_rendered

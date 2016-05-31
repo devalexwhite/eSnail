@@ -1,0 +1,38 @@
+//- Load the template base
+extends ./template_layout.pug
+
+//- TEMPLATE FILE
+//-
+//- TEMPLATE NAME:
+//-		China Letter
+//- TEMPLATE DESCRIPTION:
+//-		Letter format with a paper texture and Chinese stamp in lower-right corener
+//- TEMPLATE LINES:
+//-		2
+//- TEMPLATE COST:
+//-		0
+//- CREATION DATE:
+//-		5/30/2016
+//-	AUTHOR:
+//-		Alex White
+
+
+//- Template specific includes
+block template_includes
+	link(href="/css/templates/china_letter_template.css",rel='stylesheet')
+	link(href='https://fonts.googleapis.com/css?family=Dancing+Script:400,700',rel='stylesheet',type='text/css')
+
+
+//- Display mode for recieved mail
+block template_content_rendered
+	//- Define default size for PDF mode
+	script.
+		template_pdfmode_width = "400px"
+		template_pdfmode_height = "600px"
+	#template_body
+		#template_header
+			h1.template_editable(match-name='top_header') Click to edit this header!
+		#template_main
+			p.template_editable(match-name='main_paragraph') Click to edit the content
+//- Display mode for editing
+block template_content_edit
